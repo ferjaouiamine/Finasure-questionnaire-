@@ -48,9 +48,9 @@ La clé reste `finasureErmAssessment`. Le schéma 2026.2 contient les réponses,
 
 Les catégories internes restent utilisées pour choisir la bonne recommandation, mais leurs appellations ne sont jamais affichées au client.
 
-## Impression
+## Téléchargement PDF
 
-Le bouton « Imprimer ou enregistrer mon rapport » ouvre le formulaire client. Après validation, les coordonnées sont sauvegardées, ajoutées à la zone imprimable et `window.print()` est lancé. Le navigateur permet d’imprimer ou d’enregistrer au format PDF. La page et les résultats restent disponibles après fermeture de la fenêtre d’impression.
+Le bouton « Télécharger le rapport en PDF » ouvre le formulaire client. Après validation, les coordonnées sont sauvegardées et ajoutées au rapport. `html2pdf.js` génère ensuite localement un document A4 nommé `Rapport_Maturite_ERM_Finasure.pdf` et déclenche son téléchargement. Le menu, le footer, les actions, les modales et le calendrier sont exclus du fichier. La page et les résultats restent disponibles après le téléchargement.
 
 ## Configuration Microsoft Bookings
 
