@@ -1,27 +1,82 @@
 # Prototype Finasure — questionnaire de maturité ERM
 
-Prototype frontend autonome permettant de saisir le profil d’une organisation, répondre à 33 questions en 7 étapes et produire un rapport de maturité sur 11 dimensions.
+Prototype frontend autonome permettant de réaliser une évaluation guidée, consulter immédiatement un rapport sur onze dimensions, puis fournir ses coordonnées uniquement pour imprimer le rapport ou prendre rendez-vous.
+
+## Nouveau parcours 2026.2
+
+1. Ouvrir l’accueil et commencer l’évaluation.
+2. Répondre à toutes les questions en quatre étapes thématiques.
+3. Consulter immédiatement les résultats, sans formulaire client.
+4. Choisir « Imprimer ou enregistrer mon rapport » ou « Prendre rendez-vous ».
+5. Remplir le formulaire réutilisable uniquement à ce moment.
+6. Imprimer le rapport ou afficher Microsoft Bookings.
+
+Les quatre étapes sont : Stratégie et gouvernance ; Analyse des risques ; Suivi et continuité ; Crise et résilience. Toutes les questions, pondérations et formules initiales sont conservées.
 
 ## Technologies
 
-HTML5, CSS3, JavaScript natif et Chart.js (chargé par CDN sur la page de résultats). Aucun backend, framework, compte ou base de données.
+HTML5, CSS3, JavaScript natif, localStorage et Chart.js chargé par CDN. Aucun backend, framework, compte ou base de données.
 
 ## Structure
 
-- `index.html` : accueil et formulaire d’identification ;
-- `questionnaire.html` : parcours de 33 questions ;
-- `resultats.html` : rapport, radar et recommandations ;
-- `assets/logo-finasure.png` : logo fourni ;
-- `css/styles.css` : identité visuelle initiale ;
-- `css/style.css` : composants du parcours complet ;
+- `index.html` : accueil sans formulaire bloquant ;
+- `questionnaire.html` : questionnaire en quatre étapes ;
+- `resultats.html` : rapport gratuit, modale client et zone Booking ;
+- `css/styles.css` : identité visuelle ;
+- `css/style.css` : composants, responsive et modales ;
 - `css/print.css` : rapport imprimable ;
-- `js/questionnaire-data.js` : dimensions, poids, questions, réponses et recommandations ;
-- `js/storage.js` : objet unique `finasureErmAssessment` dans `localStorage` ;
-- `js/form.js`, `js/questionnaire.js`, `js/resultats.js` : contrôleurs des pages ;
-- `js/calcul.js` : calculs métier purs ;
-- `js/chart.js` : cycle de vie du radar Chart.js.
+- `js/questionnaire-data.js` : questions, réponses, dimensions, poids et recommandations ;
+- `js/storage.js` : stockage 2026.2 et migration ;
+- `js/questionnaire.js` : affichage, progression, validation et navigation ;
+- `js/calcul.js` : calculs métier ;
+- `js/chart.js` : radar Chart.js ;
+- `js/resultats.js` : génération sécurisée du rapport ;
+- `js/client-form.js` : formulaire différé, impression et Booking.
 
-## Lancement
+## Stockage local
+
+La clé reste `finasureErmAssessment`. Le schéma 2026.2 contient les réponses, commentaires, éléments de preuve, coordonnées client, résultats, action sélectionnée, configuration Booking, statuts d’achèvement et dates de mise à jour.
+
+`migrateAssessmentData(oldData)` préserve les réponses, commentaires, résultats et anciennes coordonnées provenant de `company` et `respondent`. L’étape ancienne est ramenée dans l’intervalle 1 à 4.
+
+## Calcul
+
+- Score d’une dimension : moyenne de ses réponses.
+- Score global : `somme(scoreDimension × poids) / 100`.
+- Priorité : `(5 − scoreDimension) × poids`.
+- Pourcentage indicatif : `scoreGlobal / 5 × 100`.
+
+Les catégories internes restent utilisées pour choisir la bonne recommandation, mais leurs appellations ne sont jamais affichées au client.
+
+## Impression
+
+Le bouton « Imprimer ou enregistrer mon rapport » ouvre le formulaire client. Après validation, les coordonnées sont sauvegardées, ajoutées à la zone imprimable et `window.print()` est lancé. Le navigateur permet d’imprimer ou d’enregistrer au format PDF. La page et les résultats restent disponibles après fermeture de la fenêtre d’impression.
+
+## Configuration Microsoft Bookings
+
+La configuration se trouve uniquement dans `js/client-form.js` :
+
+```javascript
+const BOOKING_URL = "COLLER_ICI_MON_LIEN_MICROSOFT_BOOKINGS";
+const MIN_BOOKING_DELAY_DAYS = 7;
+```
+
+Remplacer la valeur de `BOOKING_URL` par l’URL publique de la page Microsoft Bookings. Tant qu’elle n’est pas remplacée, l’application affiche un message professionnel au lieu d’un calendrier vide.
+
+Dans Microsoft Bookings :
+
+1. ouvrir la page ou le service concerné ;
+2. régler le délai minimal de réservation sur 7 jours ;
+3. vérifier le fuseau horaire de l’organisation et celui affiché au client ;
+4. définir les jours et heures disponibles ;
+5. vérifier la durée et l’espacement des créneaux ;
+6. publier la page ;
+7. copier son URL publique dans `BOOKING_URL` ;
+8. tester l’URL dans l’iframe et dans un nouvel onglet.
+
+Le frontend calcule et affiche la première date théorique disponible, mais ne peut pas modifier le contenu de l’iframe Microsoft à cause des restrictions cross-origin. La règle doit donc impérativement être configurée dans Bookings. Le lien « Ouvrir le calendrier dans un nouvel onglet » sert de solution de secours si l’intégration est bloquée.
+
+## Lancement local
 
 ```powershell
 cd "C:\Users\LENOVO I5\finasure-questionnaire-demo"
@@ -30,20 +85,26 @@ python -m http.server 8000
 
 Ouvrir `http://localhost:8000`.
 
-## Données Excel
+## Tests à réaliser avant publication
 
-Le classeur attendu est `data/Questionnaire_Maturite_ERM.xlsx`. Il n’était pas présent lors de cette livraison. `js/questionnaire-data.js` contient donc un jeu métier complet de remplacement, explicitement versionné `2026.1-fallback`.
+- parcours complet des quatre étapes ;
+- blocage d’une étape incomplète ;
+- retour arrière et rafraîchissement sans perte ;
+- progression et calculs pour des réponses de 1 à 5 ;
+- rapport accessible sans coordonnées ;
+- absence des appellations de catégories dans l’interface et l’impression ;
+- validation de chaque champ client ;
+- impression et enregistrement PDF ;
+- préremplissage lors de la seconde action ;
+- Booking configuré et non configuré ;
+- message et date minimale à sept jours ;
+- clavier, Échap, piège et retour du focus ;
+- affichage à 375, 768, 1024 et 1440 px.
 
-Pour importer le classeur : extraire ses feuilles hors navigateur, mapper les lignes vers le schéma de `questionnaire-data.js`, vérifier 33 questions, 11 dimensions, 5 réponses par question, une somme des poids de 100 %, puis remplacer ce fichier. Le prototype ne lit jamais Excel à l’exécution.
+## Limites techniques
 
-## Calcul
+Chart.js et Google Fonts nécessitent une connexion. Une iframe Microsoft Bookings peut être refusée par les règles de sécurité du service ; le lien externe reste alors disponible. localStorage est propre au navigateur et ne constitue pas une base de données sécurisée. Le classeur Excel source n’était pas disponible : les données métier actuelles restent la version de remplacement `2026.1-fallback`.
 
-Le score d’une dimension est la moyenne de ses réponses. Le score global est `somme(scoreDimension × poids) / 100`. Les priorités utilisent `(5 − scoreDimension) × poids`. Les égalités sont départagées par poids puis ordre source.
+## Mise en production et WordPress
 
-## Stockage et limites
-
-Toutes les données restent dans un seul objet local au navigateur. Effacer les données du site supprime l’évaluation. Chart.js et Google Fonts nécessitent actuellement une connexion ; sans Chart.js, un message accessible remplace le radar et les scores textuels restent visibles. Ce prototype n’est ni un audit ni une mesure de conformité.
-
-## Intégration WordPress future
-
-Intégrer les trois vues dans un thème ou plugin, embarquer localement les dépendances, remplacer les données de secours par l’export Excel validé, ajouter la politique de confidentialité et connecter le bouton d’accompagnement au formulaire de contact définitif.
+Avant intégration : remplacer les données métier par l’export Excel validé, configurer Bookings, héberger si possible Chart.js et les polices localement, ajouter les mentions de confidentialité, tester les navigateurs et lecteurs d’écran, puis intégrer les vues et scripts dans un plugin ou thème WordPress en conservant une seule instance du questionnaire par page.
