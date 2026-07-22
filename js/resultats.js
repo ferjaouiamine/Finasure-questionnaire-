@@ -1,1 +1,50 @@
-(function(){"use strict";const data=window.FINASURE_ERM_DATA,state=FinasureStorage.load(),complete=data?.questions?.every(q=>Number(state.answers[q.id])>=1&&Number(state.answers[q.id])<=5);if(!complete){sessionStorage.setItem("finasureNotice","Certaines réponses sont manquantes. Veuillez terminer le questionnaire.");location.href="questionnaire.html";return}let results;try{results=FinasureCalcul.calculate(data,state.answers);state.results={globalScore:results.globalScore,percentage:results.percentage,dimensionScores:Object.fromEntries(results.dimensions.map(d=>[d.id,d.score])),strengths:results.strengths.map(d=>d.id),priorities:results.priorities.map(d=>d.id),recommendations:results.dimensions.map(d=>d.id)};state.questionnaireCompleted=true;state.completedAt=state.completedAt||new Date().toISOString();FinasureStorage.save(state)}catch(error){showError(error.message);return}const el=(tag,cls,text)=>{const node=document.createElement(tag);if(cls)node.className=cls;if(text!==undefined)node.textContent=text;return node};function showError(text){const box=document.querySelector("#results-error");box.textContent=text;box.hidden=false}function interpretation(score){if(score<=1.8)return"Le dispositif nécessite une structuration progressive et une formalisation des pratiques essentielles.";if(score<=2.6)return"Plusieurs pratiques sont engagées, mais leur application et leur coordination doivent encore être renforcées.";if(score<=3.4)return"Le dispositif est structuré et globalement appliqué, avec des possibilités d’amélioration ciblées.";if(score<=4.2)return"La gestion des risques est bien intégrée au fonctionnement et soutient efficacement les décisions.";return"Le dispositif est pleinement intégré, piloté et continuellement amélioré comme un levier stratégique."}document.querySelector("#result-date").textContent=new Date(state.completedAt).toLocaleDateString("fr-FR");document.querySelector("#global-score").textContent=results.displayGlobalScore.replace(".",",");document.querySelector("#global-percentage").textContent=`${results.percentage} %`;document.querySelector("#global-interpretation").textContent=interpretation(results.globalScore);function rankCard(dimension,priority){const card=el("article","rank-card"),title=el("h3",null,dimension.name),score=el("p",null,`${dimension.displayScore.replace(".",",")} / 5`);card.append(title,score);if(priority){const rec=dimension.recommendations[dimension.level];card.append(el("small",null,`Poids ${dimension.weight} % · Indice ${dimension.priorityIndex.toFixed(2)}`),el("p",null,rec?.shortTerm||"Recommandation non disponible dans le fichier source."))}else card.append(el("p",null,"Une base solide sur laquelle capitaliser pour renforcer le dispositif global."));return card}results.strengths.forEach(d=>document.querySelector("#strengths").append(rankCard(d,false)));results.priorities.forEach(d=>document.querySelector("#priorities").append(rankCard(d,true)));results.dimensions.forEach(d=>{const card=el("article","dimension-card"),top=el("div","dimension-top"),title=el("h3",null,d.name),score=el("strong","score-badge",`${d.displayScore.replace(".",",")} / 5`),meta=el("p",null,`Poids ${d.weight} %`),bar=el("div","dimension-bar"),fill=el("i");fill.style.width=`${d.score/5*100}%`;top.append(title,score);bar.append(fill);card.append(top,meta,bar);document.querySelector("#dimension-list").append(card);const rec=d.recommendations[d.level],item=el("article","accordion"),button=el("button","accordion-button"),buttonTitle=el("span",null,`${d.name} — ${d.displayScore.replace(".",",")} / 5`),icon=el("span",null,"+");button.type="button";button.id=`rec-button-${d.id}`;button.setAttribute("aria-expanded","false");button.setAttribute("aria-controls",`rec-panel-${d.id}`);button.append(buttonTitle,icon);const panel=el("div","accordion-panel");panel.id=`rec-panel-${d.id}`;panel.setAttribute("role","region");panel.setAttribute("aria-labelledby",button.id);panel.hidden=true;[["Diagnostic",rec?.diagnostic],["Actions à court terme",rec?.shortTerm],["Actions à moyen terme",rec?.mediumTerm]].forEach(([label,text])=>panel.append(el("h3",null,label),el("p",null,text||"Recommandation non disponible dans le fichier source.")));button.addEventListener("click",()=>{const open=panel.hidden;panel.hidden=!open;button.setAttribute("aria-expanded",String(open));icon.textContent=open?"−":"+"});item.append(button,panel);document.querySelector("#recommendations").append(item)});const comments=Object.entries(state.comments).filter(([,value])=>String(value).trim());if(comments.length){const section=document.querySelector("#comments-section"),container=document.querySelector("#comments-list");comments.forEach(([id,value])=>{const stepMatch=/^step-(\d+)$/.exec(id),question=data.questions.find(q=>String(q.id)===String(id)),article=el("article","comment-result");let title;if(stepMatch){const stepIndex=Number(stepMatch[1])-1;title=`Étape ${stepMatch[1]} · ${data.stepNames?.[stepIndex]||"Commentaire général"}`}else{title=question?`Question ${question.id} · ${question.text}`:`Commentaire ${id}`}article.append(el("h3",null,title),el("p",null,String(value)));container.append(article)});section.hidden=false}if(!FinasureChart.renderRadar(document.querySelector("#radar-chart"),results.dimensions))document.querySelector("#chart-fallback").hidden=false;document.querySelector("#restart-button").addEventListener("click",()=>{if(confirm("Voulez-vous vraiment supprimer toutes vos réponses et recommencer l’évaluation ?")){FinasureStorage.clear();location.href="index.html"}});window.FinasureResults=Object.freeze({state,results});})();
+(function () {
+  "use strict";
+  const data = window.FINASURE_ERM_DATA;
+  const state = FinasureStorage.load();
+  const complete = data?.questions?.every((question) => {
+    const answer = Number(state.answers[question.id]);
+    return answer >= 1 && answer <= 5;
+  });
+
+  if (!complete || !state.questionnaireCompleted) {
+    sessionStorage.setItem("finasureNotice", "Certaines réponses sont manquantes. Veuillez terminer le questionnaire.");
+    location.href = "questionnaire.html";
+    return;
+  }
+
+  try {
+    const results = FinasureCalcul.calculate(data, state.answers);
+    state.results = {
+      globalScore: results.globalScore,
+      percentage: results.percentage,
+      dimensionScores: Object.fromEntries(results.dimensions.map((dimension) => [dimension.id, dimension.score])),
+      strengths: results.strengths.map((dimension) => dimension.id),
+      priorities: results.priorities.map((dimension) => dimension.id),
+      recommendations: results.dimensions.map((dimension) => dimension.id)
+    };
+    FinasureStorage.save(state);
+
+    document.querySelector("#result-date").textContent = new Date(state.completedAt).toLocaleDateString("fr-FR");
+    document.querySelector("#global-score").textContent = results.displayGlobalScore.replace(".", ",");
+    document.querySelector("#global-level").textContent = results.globalLevel;
+    document.querySelector("#global-percentage").textContent = `${results.percentage} %`;
+    document.querySelector("#global-interpretation").textContent = interpretation(results.globalScore);
+
+    if (!FinasureChart.renderRadar(document.querySelector("#radar-chart"), results.dimensions)) {
+      document.querySelector("#chart-fallback").hidden = false;
+    }
+  } catch (error) {
+    const box = document.querySelector("#results-error");
+    box.textContent = error.message;
+    box.hidden = false;
+  }
+
+  function interpretation(score) {
+    if (score <= 1.8) return "Votre dispositif nécessite une structuration progressive de ses pratiques essentielles.";
+    if (score <= 2.6) return "Plusieurs pratiques sont engagées, mais leur application doit encore être renforcée.";
+    if (score <= 3.4) return "Votre dispositif est structuré et dispose de possibilités d’amélioration ciblées.";
+    if (score <= 4.2) return "La gestion des risques est bien intégrée et soutient efficacement les décisions.";
+    return "Votre dispositif est pleinement intégré, piloté et continuellement amélioré.";
+  }
+})();

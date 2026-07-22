@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="Prendre rendez-vous avec Finasure">
+  <title>Prendre rendez-vous | Finasure</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <a class="skip-link" href="#main">Aller au contenu</a>
+  <header class="site-header"><a class="brand" href="index.html"><img src="assets/logo-finasure.png" alt="Finasure — Assurance et Réassurance"></a><nav class="main-nav"><a href="rapport-complet.html">Mon rapport</a><a href="index.html">Accueil</a></nav></header>
+  <main id="main" class="appointment-page">
+    <section class="appointment-heading"><p class="eyebrow"><span></span> Accompagnement Finasure</p><h1 class="page-title">Choisissez votre rendez-vous</h1><p>Sélectionnez une date puis un créneau pour échanger avec un expert Finasure.</p><div class="notice"><strong>Démonstration :</strong> les disponibilités affichées sont fictives. Les rendez-vous sont proposés à partir de 7 jours après votre demande.</div></section>
+    <div id="appointment-error" class="notice error" role="alert" hidden></div>
+    <div class="appointment-layout">
+      <section class="calendar-card" aria-labelledby="calendar-title">
+        <div class="calendar-header"><button id="previous-month" class="calendar-nav" type="button" aria-label="Mois précédent">←</button><h2 id="calendar-title" aria-live="polite"></h2><button id="next-month" class="calendar-nav" type="button" aria-label="Mois suivant">→</button></div>
+        <div class="calendar-weekdays" aria-hidden="true"><span>Lun</span><span>Mar</span><span>Mer</span><span>Jeu</span><span>Ven</span><span>Sam</span><span>Dim</span></div>
+        <div id="calendar-grid" class="calendar-grid" role="grid" aria-labelledby="calendar-title"></div>
+        <div class="calendar-legend"><span><i class="legend-dot available"></i>Disponible</span><span><i class="legend-dot unavailable"></i>Indisponible</span><span><i class="legend-dot full"></i>Complet</span></div>
+      </section>
+      <section class="slots-card" aria-labelledby="slots-title">
+        <p class="mini-label">Date sélectionnée</p><h2 id="selected-date">Choisissez une date</h2><h3 id="slots-title">Créneaux disponibles</h3><div id="slots-list" class="slots-list" role="radiogroup" aria-labelledby="slots-title"><p class="slots-placeholder">Les créneaux apparaîtront après la sélection d’une date disponible.</p></div>
+      </section>
+    </div>
+    <section class="appointment-form-section" aria-labelledby="appointment-form-title">
+      <div class="section-heading"><p class="eyebrow"><span></span> Vos informations</p><h2 id="appointment-form-title">Confirmez votre demande</h2></div>
+      <form id="appointment-form" class="identity-form" novalidate>
+        <div class="field"><label for="appointment-firstName">Prénom *</label><input id="appointment-firstName" name="firstName" autocomplete="given-name" minlength="2" required><small id="error-firstName" class="field-error" aria-live="polite"></small></div>
+        <div class="field"><label for="appointment-lastName">Nom *</label><input id="appointment-lastName" name="lastName" autocomplete="family-name" minlength="2" required><small id="error-lastName" class="field-error" aria-live="polite"></small></div>
+        <div class="field"><label for="appointment-company">Entreprise *</label><input id="appointment-company" name="company" autocomplete="organization" required><small id="error-company" class="field-error" aria-live="polite"></small></div>
+        <div class="field"><label for="appointment-email">Adresse e-mail *</label><input id="appointment-email" name="email" type="email" autocomplete="email" required><small id="error-email" class="field-error" aria-live="polite"></small></div>
+        <div class="field"><label for="appointment-phone">Téléphone *</label><input id="appointment-phone" name="phone" type="tel" autocomplete="tel" required><small id="error-phone" class="field-error" aria-live="polite"></small></div>
+        <div class="field field-wide"><label for="appointment-reason">Motif du rendez-vous *</label><textarea id="appointment-reason" name="reason" rows="4" placeholder="Précisez brièvement votre besoin…" required></textarea><small id="error-reason" class="field-error" aria-live="polite"></small></div>
+        <div class="appointment-summary field-wide"><strong>Rendez-vous choisi</strong><span id="appointment-selection">Aucun créneau sélectionné</span><small id="error-slot" class="field-error" aria-live="polite"></small></div>
+        <div id="appointment-success" class="notice appointment-success field-wide" role="status" aria-live="polite" hidden>Votre demande de rendez-vous a bien été enregistrée.</div>
+        <div class="form-actions"><a class="button button-ghost" href="rapport-complet.html">← Retour au rapport</a><button id="appointment-submit" class="button" type="submit">Enregistrer ma demande →</button></div>
+      </form>
+    </section>
+  </main>
+  <footer><a class="brand footer-brand" href="index.html"><img src="assets/logo-finasure.png" alt="Finasure"></a><p>Prise de rendez-vous — démonstration</p><p>© 2026 Finasure.</p></footer>
+  <script src="js/questionnaire-data.js"></script><script src="js/storage.js"></script><script src="js/calendar-data.js"></script><script src="js/rendez-vous.js"></script>
+</body>
+</html>

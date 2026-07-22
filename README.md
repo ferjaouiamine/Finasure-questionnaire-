@@ -1,82 +1,71 @@
 # Prototype Finasure — questionnaire de maturité ERM
 
-Prototype frontend autonome permettant de réaliser une évaluation guidée, consulter immédiatement un rapport sur onze dimensions, puis fournir ses coordonnées uniquement pour imprimer le rapport ou prendre rendez-vous.
+Prototype frontend autonome permettant de réaliser une auto-évaluation, consulter immédiatement un aperçu, puis débloquer un rapport détaillé après validation des informations du répondant.
 
-## Nouveau parcours 2026.2
+## Parcours utilisateur
 
-1. Ouvrir l’accueil et commencer l’évaluation.
-2. Répondre à toutes les questions en quatre étapes thématiques.
-3. Consulter immédiatement les résultats, sans formulaire client.
-4. Choisir « Imprimer ou enregistrer mon rapport » ou « Prendre rendez-vous ».
-5. Remplir le formulaire réutilisable uniquement à ce moment.
-6. Imprimer le rapport ou afficher Microsoft Bookings.
+1. `index.html` présente la démarche ; le CTA est placé après tout le contenu.
+2. `questionnaire.html` affiche les questions en quatre étapes thématiques.
+3. `resultats.html` affiche uniquement le score global, son interprétation et le radar.
+4. Le CTA « Recevoir mon rapport gratuit » ouvre `demande-rapport.html`.
+5. Après validation du formulaire, `rapport-complet.html` présente forces, priorités, dimensions et recommandations.
+6. Le répondant peut imprimer/enregistrer le rapport en PDF ou prendre rendez-vous.
 
-Les quatre étapes sont : Stratégie et gouvernance ; Analyse des risques ; Suivi et continuité ; Crise et résilience. Toutes les questions, pondérations et formules initiales sont conservées.
+## Fichiers principaux
 
-## Technologies
-
-HTML5, CSS3, JavaScript natif, localStorage et Chart.js chargé par CDN. Aucun backend, framework, compte ou base de données.
-
-## Structure
-
-- `index.html` : accueil sans formulaire bloquant ;
-- `questionnaire.html` : questionnaire en quatre étapes ;
-- `resultats.html` : rapport gratuit, modale client et zone Booking ;
-- `css/styles.css` : identité visuelle ;
-- `css/style.css` : composants, responsive et modales ;
-- `css/print.css` : rapport imprimable ;
-- `js/questionnaire-data.js` : questions, réponses, dimensions, poids et recommandations ;
-- `js/storage.js` : stockage 2026.2 et migration ;
-- `js/questionnaire.js` : affichage, progression, validation et navigation ;
+- `index.html` : accueil et CTA final ;
+- `questionnaire.html` : questionnaire ;
+- `resultats.html` : aperçu protégé ;
+- `demande-rapport.html` : collecte des informations ;
+- `rapport-complet.html` : rapport détaillé protégé ;
+- `rendez-vous.html` : calendrier et formulaire de rendez-vous fictifs ;
+- `js/questionnaire-data.js` : questions, choix, dimensions, poids et recommandations ;
+- `js/storage.js` : stockage version 2026.3 et migration ;
+- `js/questionnaire.js` : navigation et validation ;
+- `js/resultats.js` : score et radar ;
+- `js/demande-rapport.js` : validation du formulaire ;
+- `js/rapport-complet.js` : rapport, impression et rendez-vous ;
+- `js/calendar-data.js` : disponibilités fictives isolées et `getAvailableSlots(date)` ;
+- `js/rendez-vous.js` : navigation mensuelle, sélection et sauvegarde de la demande ;
 - `js/calcul.js` : calculs métier ;
 - `js/chart.js` : radar Chart.js ;
-- `js/resultats.js` : génération sécurisée du rapport ;
-- `js/client-form.js` : formulaire différé, impression et Booking.
+- `css/style.css` et `css/print.css` : affichage responsive et impression A4.
 
-## Stockage local
+## Réponses exactes du classeur
 
-La clé reste `finasureErmAssessment`. Le schéma 2026.2 contient les réponses, commentaires, éléments de preuve, coordonnées client, résultats, action sélectionnée, configuration Booking, statuts d’achèvement et dates de mise à jour.
+Les 33 questions et leurs 165 réponses sont importées depuis `data/Questionnaire_Maturite_ERM(1).xlsx`, feuille `1. Questionnaire`. La question provient de la colonne C et les réponses A à E des colonnes D à H. Les scores internes restent respectivement 1 à 5.
 
-`migrateAssessmentData(oldData)` préserve les réponses, commentaires, résultats et anciennes coordonnées provenant de `company` et `respondent`. L’étape ancienne est ramenée dans l’intervalle 1 à 4.
+Le script `tools/import_excel_questions.py` permet de régénérer et valider la section correspondante de `js/questionnaire-data.js`. Il refuse l’import si le nombre de questions est différent de 33, si une réponse manque, si deux réponses d’une question sont identiques ou si les scores ne suivent pas l’ordre 1 à 5.
 
-## Calcul
+## Contrôles d’accès
 
-- Score d’une dimension : moyenne de ses réponses.
-- Score global : `somme(scoreDimension × poids) / 100`.
-- Priorité : `(5 − scoreDimension) × poids`.
-- Pourcentage indicatif : `scoreGlobal / 5 × 100`.
+- l’aperçu exige un questionnaire complet ;
+- la collecte exige des résultats valides ;
+- le rapport complet exige le questionnaire, les résultats, le formulaire et le consentement ;
+- aucune donnée personnelle n’est placée dans l’URL.
 
-Les catégories internes restent utilisées pour choisir la bonne recommandation, mais leurs appellations ne sont jamais affichées au client.
+La clé localStorage reste `finasureErmAssessment`. La version 2026.3 ajoute `leadFormCompleted` et conserve la migration des anciennes réponses, commentaires, résultats et coordonnées.
 
-## Téléchargement PDF
+## Calculs
 
-Le bouton « Télécharger le rapport en PDF » ouvre le formulaire client. Après validation, les coordonnées sont sauvegardées et ajoutées au rapport. `html2pdf.js` génère ensuite localement un document A4 nommé `Rapport_Maturite_ERM_Finasure.pdf` et déclenche son téléchargement. Le menu, le footer, les actions, les modales et le calendrier sont exclus du fichier. La page et les résultats restent disponibles après le téléchargement.
+- score d’une dimension : moyenne de ses réponses ;
+- score global : `somme(scoreDimension × poids) / 100` ;
+- priorité : `(5 − scoreDimension) × poids` ;
+- pourcentage indicatif : `scoreGlobal / 5 × 100`.
 
-## Configuration Microsoft Bookings
+## PDF et rendez-vous
 
-La configuration se trouve uniquement dans `js/client-form.js` :
+Le bouton PDF ouvre `window.print()` et la feuille `css/print.css` permet d’imprimer ou d’enregistrer en PDF. Les recommandations sont ouvertes avant impression.
+
+Le rapport redirige actuellement vers le calendrier de démonstration :
 
 ```javascript
-const BOOKING_URL = "COLLER_ICI_MON_LIEN_MICROSOFT_BOOKINGS";
-const MIN_BOOKING_DELAY_DAYS = 7;
+const APPOINTMENT_URL = "rendez-vous.html";
 ```
 
-Remplacer la valeur de `BOOKING_URL` par l’URL publique de la page Microsoft Bookings. Tant qu’elle n’est pas remplacée, l’application affiche un message professionnel au lieu d’un calendrier vide.
+Les disponibilités fictives sont définies dans `js/calendar-data.js` : jours ouvrés du lundi au vendredi, six horaires, dates complètes et délai minimal de sept jours. La fonction `getAvailableSlots(date)` constitue le point de remplacement futur par un appel à un véritable service de calendrier. Les demandes de démonstration sont enregistrées dans `finasureErmAssessment.booking.appointment`.
 
-Dans Microsoft Bookings :
-
-1. ouvrir la page ou le service concerné ;
-2. régler le délai minimal de réservation sur 7 jours ;
-3. vérifier le fuseau horaire de l’organisation et celui affiché au client ;
-4. définir les jours et heures disponibles ;
-5. vérifier la durée et l’espacement des créneaux ;
-6. publier la page ;
-7. copier son URL publique dans `BOOKING_URL` ;
-8. tester l’URL dans l’iframe et dans un nouvel onglet.
-
-Le frontend calcule et affiche la première date théorique disponible, mais ne peut pas modifier le contenu de l’iframe Microsoft à cause des restrictions cross-origin. La règle doit donc impérativement être configurée dans Bookings. Le lien « Ouvrir le calendrier dans un nouvel onglet » sert de solution de secours si l’intégration est bloquée.
-
-## Lancement local
+## Lancement
 
 ```powershell
 cd "C:\Users\LENOVO I5\finasure-questionnaire-demo"
@@ -85,26 +74,11 @@ python -m http.server 8000
 
 Ouvrir `http://localhost:8000`.
 
-## Tests à réaliser avant publication
+## Limites avant production
 
-- parcours complet des quatre étapes ;
-- blocage d’une étape incomplète ;
-- retour arrière et rafraîchissement sans perte ;
-- progression et calculs pour des réponses de 1 à 5 ;
-- rapport accessible sans coordonnées ;
-- absence des appellations de catégories dans l’interface et l’impression ;
-- validation de chaque champ client ;
-- impression et enregistrement PDF ;
-- préremplissage lors de la seconde action ;
-- Booking configuré et non configuré ;
-- message et date minimale à sept jours ;
-- clavier, Échap, piège et retour du focus ;
-- affichage à 375, 768, 1024 et 1440 px.
-
-## Limites techniques
-
-Chart.js et Google Fonts nécessitent une connexion. Une iframe Microsoft Bookings peut être refusée par les règles de sécurité du service ; le lien externe reste alors disponible. localStorage est propre au navigateur et ne constitue pas une base de données sécurisée. Le classeur Excel source n’était pas disponible : les données métier actuelles restent la version de remplacement `2026.1-fallback`.
-
-## Mise en production et WordPress
-
-Avant intégration : remplacer les données métier par l’export Excel validé, configurer Bookings, héberger si possible Chart.js et les polices localement, ajouter les mentions de confidentialité, tester les navigateurs et lecteurs d’écran, puis intégrer les vues et scripts dans un plugin ou thème WordPress en conservant une seule instance du questionnaire par page.
+- importer les réponses exactes du classeur Excel ;
+- configurer l’URL définitive de rendez-vous ;
+- tester l’impression sur les navigateurs cibles ;
+- ajouter les mentions de confidentialité ;
+- héberger Chart.js et les polices localement si un fonctionnement hors ligne est requis ;
+- intégrer les vues et scripts dans un plugin ou thème WordPress.

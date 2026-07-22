@@ -17,7 +17,7 @@
 @media(max-width:768px){.step-comment{padding:20px}}
 
 /* Barre d’actions persistante de la page de résultats. */
-.results-page{padding-bottom:150px}
+.full-report-page{padding-bottom:150px}
 .fixed-action-bar{position:fixed;left:0;right:0;bottom:0;z-index:900;margin:0;padding:12px 24px calc(12px + env(safe-area-inset-bottom));display:block;background:linear-gradient(180deg,rgba(255,255,255,.54),rgba(244,251,253,.7));border-top:1px solid rgba(255,255,255,.78);box-shadow:0 -8px 30px rgba(7,27,51,.1);backdrop-filter:blur(12px) saturate(145%);-webkit-backdrop-filter:blur(12px) saturate(145%)}
 .fixed-action-bar-inner{width:min(760px,100%);margin:0 auto;display:flex;align-items:center;justify-content:center;gap:12px}
 .report-action-button{display:inline-flex;align-items:center;justify-content:center;gap:9px;min-height:44px;padding:11px 18px;border:1px solid rgba(0,169,212,.34);border-radius:14px;background:linear-gradient(135deg,rgba(0,169,212,.2),rgba(0,169,212,.1));color:#075f7a;font-size:14px;line-height:1.2;box-shadow:0 6px 18px rgba(0,169,212,.12),inset 0 1px 0 rgba(255,255,255,.7);backdrop-filter:blur(14px) saturate(150%);-webkit-backdrop-filter:blur(14px) saturate(150%);transition:transform .22s ease,box-shadow .22s ease,background-color .22s ease,border-color .22s ease}
@@ -26,7 +26,7 @@
 .report-action-button.button-secondary:hover{background:linear-gradient(135deg,rgba(7,27,51,.88),rgba(11,41,71,.76));border-color:rgba(0,169,212,.35);color:#fff;box-shadow:0 10px 26px rgba(7,27,51,.24),0 0 18px rgba(0,169,212,.12),inset 0 1px 0 rgba(255,255,255,.24)}
 .report-action-button:active{transform:translateY(0)}
 .action-icon{width:19px;height:19px;flex:0 0 19px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
-@media(max-width:768px){.results-page{padding-bottom:190px}.fixed-action-bar{padding:10px 14px calc(10px + env(safe-area-inset-bottom))}.fixed-action-bar-inner{flex-direction:column;gap:8px}.fixed-action-bar .report-action-button{width:100%;min-height:43px;padding:10px 15px}}
+@media(max-width:768px){.full-report-page{padding-bottom:190px}.fixed-action-bar{padding:10px 14px calc(10px + env(safe-area-inset-bottom))}.fixed-action-bar-inner{flex-direction:column;gap:8px}.fixed-action-bar .report-action-button{width:100%;min-height:43px;padding:10px 15px}}
 
 /* État et mise en page utilisés par le téléchargement PDF. */
 .pdf-status{position:fixed;right:20px;bottom:92px;z-index:950;max-width:min(420px,calc(100vw - 40px));margin:0;padding:12px 16px;border:1px solid rgba(0,169,212,.25);border-radius:12px;background:rgba(255,255,255,.96);color:var(--navy);box-shadow:0 10px 30px rgba(7,27,51,.16);font-size:13px;font-weight:700}
@@ -42,3 +42,45 @@
 .pdf-export-mode .accordion-panel{display:block!important}
 .pdf-export-mode .accordion-button span:last-child{display:none}
 @media(max-width:768px){.pdf-status{right:14px;bottom:175px;max-width:calc(100vw - 28px)}}
+
+/* Accueil, aperçu et collecte du rapport. */
+.home-final-cta{max-width:760px;margin:0 auto;padding:58px 30px 70px;text-align:center}
+.home-final-cta .method-note{color:var(--muted);margin:8px auto 24px}
+.home-final-cta .button{text-decoration:none;display:inline-flex}
+.summary-results-page{max-width:1050px;padding-bottom:70px}
+.unlock-report-card{margin:65px 0 20px;padding:38px;text-align:center;color:#fff;background:linear-gradient(135deg,var(--navy),#0e3b61);border-radius:20px;box-shadow:var(--shadow)}
+.unlock-report-card h2{color:#fff;margin-top:0}
+.unlock-report-card p{max-width:660px;margin:0 auto 24px;color:#c2d3df}
+.unlock-report-card .button{text-decoration:none;display:inline-flex}
+.lead-page{max-width:980px;min-height:calc(100vh - 86px);margin:0 auto;padding:65px 30px}
+.lead-page .identity-form{margin-bottom:60px}
+.consent-error{grid-column:1/-1;margin-top:-17px}
+.full-report-page .print-client{display:block}
+@media(max-width:768px){.home-final-cta{padding:42px 22px 55px}.unlock-report-card{padding:28px 20px;margin-top:45px}.unlock-report-card .button{width:100%;justify-content:center}.lead-page{padding:45px 18px}.lead-page .identity-form{padding:22px}.lead-page .form-actions{display:grid}.lead-page .form-actions .button{width:100%;text-align:center;text-decoration:none}}
+
+/* Prise de rendez-vous de démonstration. */
+.appointment-page{max-width:1180px;min-height:calc(100vh - 86px);margin:0 auto;padding:60px 30px 80px}
+.appointment-heading{max-width:820px;margin-bottom:32px}
+.appointment-layout{display:grid;grid-template-columns:minmax(0,1.45fr) minmax(280px,.75fr);gap:24px;align-items:start}
+.calendar-card,.slots-card,.appointment-form-section{background:#fff;border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow)}
+.calendar-card,.slots-card{padding:26px}
+.calendar-header{display:grid;grid-template-columns:44px 1fr 44px;align-items:center;gap:12px;margin-bottom:20px}
+.calendar-header h2{text-align:center;text-transform:capitalize;font-size:25px;margin:0}
+.calendar-nav{width:44px;height:44px;border:1px solid var(--line);border-radius:12px;background:rgba(232,248,252,.7);color:var(--navy);font-size:20px;cursor:pointer;transition:.2s}
+.calendar-nav:hover:not(:disabled){border-color:var(--cyan);background:var(--cyan-light);transform:translateY(-1px)}
+.calendar-nav:disabled{opacity:.35;cursor:not-allowed}
+.calendar-weekdays,.calendar-grid{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:7px}
+.calendar-weekdays{margin-bottom:7px;color:var(--muted);font-size:11px;font-weight:800;text-align:center;text-transform:uppercase}
+.calendar-day,.calendar-empty{min-width:0;aspect-ratio:1;display:grid;place-items:center;border-radius:10px}
+.calendar-day{border:1px solid transparent;font-weight:700;cursor:pointer;transition:transform .18s ease,box-shadow .18s ease,border-color .18s ease}
+.calendar-day.is-available{color:#075f7a;background:rgba(0,169,212,.11);border-color:rgba(0,169,212,.25)}
+.calendar-day.is-available:hover{transform:translateY(-2px);border-color:var(--cyan);box-shadow:0 7px 16px rgba(0,169,212,.17)}
+.calendar-day.is-selected{color:#fff;background:var(--cyan);border-color:var(--cyan);box-shadow:0 7px 18px rgba(0,169,212,.28)}
+.calendar-day.is-unavailable{color:#9ba8b6;background:#f1f4f6;cursor:not-allowed}
+.calendar-day.is-full{color:#9b4e45;background:#fff0ee;border-color:#f4cec9;cursor:not-allowed}
+.calendar-legend{display:flex;flex-wrap:wrap;gap:14px;margin-top:20px;color:var(--muted);font-size:11px}
+.calendar-legend span{display:flex;align-items:center;gap:6px}.legend-dot{width:10px;height:10px;border-radius:50%}.legend-dot.available{background:var(--cyan)}.legend-dot.unavailable{background:#c9d1d8}.legend-dot.full{background:#db8176}
+.slots-card{position:sticky;top:108px}.slots-card h2{font-size:22px;margin:7px 0 24px;text-transform:capitalize}.slots-card h3{font-size:15px}.slots-list{display:grid;grid-template-columns:1fr 1fr;gap:9px}.slots-placeholder{grid-column:1/-1;color:var(--muted);font-size:13px}.slot-option{position:relative}.slot-option input{position:absolute;opacity:0}.slot-option label{display:block;padding:11px 8px;text-align:center;border:1px solid var(--line);border-radius:9px;color:var(--navy);font-weight:700;cursor:pointer;transition:.18s}.slot-option input:checked+label{color:#fff;background:var(--navy);border-color:var(--navy);box-shadow:0 6px 16px rgba(7,27,51,.2)}.slot-option input:focus-visible+label{outline:3px solid rgba(0,169,212,.3);outline-offset:2px}
+.appointment-form-section{margin-top:32px;padding:30px}.appointment-form-section .identity-form{margin:0;padding:0;border:0;box-shadow:none}.appointment-form-section textarea{width:100%;resize:vertical;border:1px solid #ccd8e1;border-radius:8px;padding:13px}.appointment-summary{display:flex;justify-content:space-between;gap:18px;padding:16px;border-radius:10px;background:var(--cyan-light);color:var(--navy)}.appointment-summary span{text-align:right}.appointment-success{margin:0}.appointment-form-section .form-actions a{text-decoration:none}
+@media(max-width:900px){.appointment-layout{grid-template-columns:1fr}.slots-card{position:static}.slots-list{grid-template-columns:repeat(3,1fr)}}
+@media(max-width:600px){.appointment-page{padding:42px 14px 60px}.calendar-card,.slots-card,.appointment-form-section{padding:18px 14px}.calendar-header{grid-template-columns:40px 1fr 40px}.calendar-header h2{font-size:20px}.calendar-nav{width:40px;height:40px}.calendar-weekdays,.calendar-grid{gap:4px}.calendar-day{border-radius:8px;font-size:12px}.slots-list{grid-template-columns:1fr 1fr}.appointment-summary{display:grid}.appointment-summary span{text-align:left}.appointment-form-section .form-actions{display:grid}.appointment-form-section .form-actions .button{width:100%;text-align:center}}

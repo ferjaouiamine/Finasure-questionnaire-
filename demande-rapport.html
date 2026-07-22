@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Recevoir votre rapport | Finasure</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <a class="skip-link" href="#main">Aller au contenu</a>
+  <header class="site-header"><a class="brand" href="index.html"><img src="assets/logo-finasure.png" alt="Finasure — Assurance et Réassurance"></a><nav class="main-nav"><a href="resultats.html">Mon aperçu</a><a href="index.html">Accueil</a></nav></header>
+  <main id="main" class="lead-page">
+    <section class="form-heading"><p class="eyebrow"><span></span> Rapport personnalisé</p><h1 class="page-title">Recevez gratuitement votre rapport complet</h1><p>Renseignez vos informations pour accéder aux forces, priorités et recommandations détaillées de votre organisation.</p></section>
+    <div id="lead-page-error" class="notice error" role="alert" hidden></div>
+    <form id="lead-form" class="identity-form" novalidate>
+      <div class="field"><label for="lead-company">Nom de l’entreprise *</label><input id="lead-company" name="company" autocomplete="organization" required><small id="error-company" class="field-error" aria-live="polite"></small></div>
+      <div class="field"><label for="lead-sector">Secteur d’activité *</label><select id="lead-sector" name="sector" required><option value="">Sélectionnez</option><option>Assurance et services financiers</option><option>Industrie</option><option>Commerce et distribution</option><option>Technologies</option><option>Santé</option><option>Services professionnels</option><option>Autre</option></select><small id="error-sector" class="field-error" aria-live="polite"></small></div>
+      <div class="field"><label for="lead-workforce">Effectif *</label><select id="lead-workforce" name="workforce" required><option value="">Sélectionnez</option><option>1 à 10</option><option>11 à 49</option><option>50 à 249</option><option>250 à 999</option><option>1 000 et plus</option></select><small id="error-workforce" class="field-error" aria-live="polite"></small></div>
+      <div class="field"><label for="lead-firstName">Prénom *</label><input id="lead-firstName" name="firstName" autocomplete="given-name" minlength="2" required><small id="error-firstName" class="field-error" aria-live="polite"></small></div>
+      <div class="field"><label for="lead-lastName">Nom *</label><input id="lead-lastName" name="lastName" autocomplete="family-name" minlength="2" required><small id="error-lastName" class="field-error" aria-live="polite"></small></div>
+      <div class="field"><label for="lead-jobTitle">Fonction *</label><input id="lead-jobTitle" name="jobTitle" autocomplete="organization-title" required><small id="error-jobTitle" class="field-error" aria-live="polite"></small></div>
+      <div class="field"><label for="lead-email">Adresse e-mail professionnelle *</label><input id="lead-email" name="email" type="email" autocomplete="email" required><small id="error-email" class="field-error" aria-live="polite"></small></div>
+      <div class="field"><label for="lead-phone">Numéro de téléphone <small>(facultatif)</small></label><input id="lead-phone" name="phone" type="tel" autocomplete="tel"><small id="error-phone" class="field-error" aria-live="polite"></small></div>
+      <label class="consent"><input id="lead-consent" name="consent" type="checkbox" required><span>J’accepte le traitement local de mes informations pour accéder à mon rapport. *</span></label><small id="error-consent" class="field-error consent-error" aria-live="polite"></small>
+      <div class="form-actions"><a class="button button-ghost" href="resultats.html">← Retour à mon aperçu</a><button class="button" type="submit">Accéder à mon rapport complet →</button></div>
+    </form>
+  </main>
+  <footer><a class="brand footer-brand" href="index.html"><img src="assets/logo-finasure.png" alt="Finasure"></a><p>Demande de rapport ERM</p><p>© 2026 Finasure.</p></footer>
+  <script src="js/questionnaire-data.js"></script><script src="js/storage.js"></script><script src="js/demande-rapport.js"></script>
+</body>
+</html>
