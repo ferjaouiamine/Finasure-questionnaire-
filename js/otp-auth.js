@@ -38,10 +38,19 @@
       token: code,
       type: "email"
     });
-    if (error || !data.user) {
-      throw new Error("Le code est incorrect ou a expiré.");
+    if (!error && data.user) return data.user;
+
+    // Le code peut avoir été consommé juste avant un échec d'enregistrement
+    // en base. Dans ce cas, la session Supabase vérifiée reste valable.
+    const { data: sessionData } = await client().auth.getUser();
+    const sessionUser = sessionData?.user;
+    if (
+      sessionUser?.email_confirmed_at &&
+      normalizeEmail(sessionUser.email) === normalizeEmail(email)
+    ) {
+      return sessionUser;
     }
-    return data.user;
+    throw new Error("Le code est incorrect ou a expiré.");
   }
 
   async function markAssessmentVerified(state) {
