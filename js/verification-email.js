@@ -103,17 +103,15 @@
     const spacing = Math.max(0.08, Math.min(0.45, 3.2 / digitCount));
     input.style.setProperty("--otp-spacing", `${spacing}em`);
   }
-  input.addEventListener("beforeinput", (event) => {
-    if (event.data !== null && !/^\d+$/.test(event.data)) event.preventDefault();
-  });
-  input.addEventListener("paste", (event) => {
-    const pasted = event.clipboardData?.getData("text") || "";
-    if (!/^\d+$/.test(pasted)) {
-      event.preventDefault();
-      errorBox.textContent = "Le code doit contenir uniquement des chiffres.";
-    }
-  });
+  function normalizeMobileDigits(value) {
+    return String(value || "")
+      .replace(/[٠-٩]/g, (digit) => String(digit.charCodeAt(0) - 1632))
+      .replace(/[۰-۹]/g, (digit) => String(digit.charCodeAt(0) - 1776))
+      .replace(/\D/g, "");
+  }
   input.addEventListener("input", () => {
+    const normalized = normalizeMobileDigits(input.value);
+    if (input.value !== normalized) input.value = normalized;
     errorBox.textContent = "";
     adaptDigitSpacing();
   });

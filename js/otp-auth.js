@@ -29,7 +29,7 @@
   }
 
   async function verifyCode(email, token) {
-    const code = String(token || "");
+    const code = String(token || "").trim();
     if (!/^\d+$/.test(code)) {
       throw new Error("Saisissez uniquement les chiffres du code reçu par email.");
     }
