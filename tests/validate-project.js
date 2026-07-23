@@ -52,6 +52,10 @@ const otpMigration = fs.readFileSync(
   path.join(root, "supabase/migrations/202607230002_email_otp.sql"),
   "utf8"
 );
+const repeatRespondentsMigration = fs.readFileSync(
+  path.join(root, "supabase/migrations/202607230004_allow_repeat_verified_respondents.sql"),
+  "utf8"
+);
 const reportMigration = fs.readFileSync(
   path.join(root, "supabase/migrations/202607230003_automatic_pdf_reports.sql"),
   "utf8"
@@ -70,6 +74,9 @@ for (const field of ["email_verified", "email_verified_at", "auth_user_id"]) {
 }
 for (const rpc of ["verify_assessment_email", "is_assessment_email_verified"]) {
   if (!otpMigration.includes(rpc)) throw new Error(`Fonction OTP absente: ${rpc}`);
+}
+if (!repeatRespondentsMigration.includes("drop constraint if exists respondents_auth_user_id_key")) {
+  throw new Error("La réutilisation sécurisée d’une identité OTP n’est pas configurée.");
 }
 for (const required of [
   "assessment_recommendations", "recipient_email", "provider_message_id",
