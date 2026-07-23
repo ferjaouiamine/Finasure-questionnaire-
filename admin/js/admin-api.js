@@ -24,7 +24,13 @@
     q=q.order("completed_at",{ascending:false}).range(params.from,params.to);return check(await q);
   }
   async function assessment(id){return check(await db().from("assessments").select("*,companies(*),respondents(*),assessment_answers(*),dimension_scores(*),reports(*),appointments(*)").eq("id",id).single()).data;}
-  async function reports(){return check(await db().from("reports").select("*,assessments(global_score,global_level,companies(name),respondents(first_name,last_name,email,email_verified))").order("created_at",{ascending:false})).data;}
+  async function reports(status){
+    let q=db().from("reports").select("*,assessments(completed_at,global_score,global_level,companies(name),respondents(first_name,last_name,email,email_verified))");
+    if(status==="sent")q=q.eq("status","sent");
+    if(status==="pending")q=q.in("status",["pending","generating","generated"]);
+    if(status==="failed")q=q.eq("status","failed");
+    return check(await q.order("created_at",{ascending:false})).data;
+  }
   async function appointments(){return check(await db().from("appointments").select("*,assessments(companies(name),respondents(first_name,last_name,email,phone,email_verified))").order("created_at",{ascending:false})).data;}
   async function activity(){return check(await db().from("activity_logs").select("*,companies(name),assessments(global_score)").order("created_at",{ascending:false}).limit(250)).data;}
   window.AdminApi=Object.freeze({dashboard,companies,company,assessments,assessment,reports,appointments,activity});

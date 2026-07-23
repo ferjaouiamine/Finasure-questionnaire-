@@ -8,6 +8,12 @@
   const submitButton = document.querySelector("#otp-submit");
   const resendButton = document.querySelector("#otp-resend");
   const countdown = document.querySelector("#otp-countdown");
+  const deliveryStatus = document.querySelector("#report-delivery-status");
+  const reportLoader = document.querySelector("#report-loader");
+  const reportTitle = document.querySelector("#report-status-title");
+  const reportMessage = document.querySelector("#report-status-message");
+  const reportActions = document.querySelector("#report-status-actions");
+  const retryReportButton = document.querySelector("#retry-report-email");
   let timer;
 
   if (!state.questionnaireCompleted || !state.leadFormCompleted || !state.client?.email) {
@@ -33,6 +39,63 @@
     };
     render();
     timer = setInterval(render, 1000);
+  }
+  function showVerifiedInterface() {
+    form.hidden = true;
+    document.querySelector(".otp-resend").hidden = true;
+    document.querySelector(".otp-change-email").hidden = true;
+    successBox.textContent = "Adresse email vérifiée avec succès.";
+    successBox.hidden = false;
+    deliveryStatus.hidden = false;
+  }
+  function setDeliveryState(title, message, options = {}) {
+    reportTitle.textContent = title;
+    reportMessage.textContent = message;
+    reportLoader.hidden = !options.loading;
+    reportActions.hidden = Boolean(options.loading);
+    retryReportButton.hidden = !options.retry;
+  }
+  async function deliverReport(resend = false) {
+    showVerifiedInterface();
+    setDeliveryState(
+      "Préparation de votre rapport...",
+      "Nous générons votre PDF Finasure et préparons son envoi sécurisé.",
+      { loading: true }
+    );
+    try {
+      const result = await FinasureOtp.sendReport(state, { resend });
+      state.reportEmailStatus = result.status || "sent";
+      state.reportEmailMessage = result.message || "";
+      FinasureStorage.save(state);
+      if (result.status === "already_sent") {
+        setDeliveryState(
+          "Rapport déjà envoyé",
+          "Votre rapport a déjà été envoyé à votre adresse email."
+        );
+      } else if (result.status === "processing") {
+        setDeliveryState(
+          "Rapport en cours de préparation",
+          "La génération est déjà en cours. Patientez quelques instants puis actualisez cette page."
+        );
+      } else {
+        setDeliveryState(
+          "Votre rapport a été envoyé",
+          "Votre rapport a été envoyé à votre adresse email."
+        );
+      }
+    } catch (error) {
+      state.reportEmailStatus = "failed";
+      state.reportEmailMessage = error.message;
+      FinasureStorage.save(state);
+      const generationFailed = error.code === "pdf_generation_failed";
+      setDeliveryState(
+        generationFailed ? "PDF non généré" : "Envoi du rapport interrompu",
+        generationFailed
+          ? "Votre adresse email a été vérifiée, mais nous n’avons pas pu générer votre PDF. Vous pouvez consulter votre rapport en ligne."
+          : "Votre rapport est prêt, mais l’envoi par email a rencontré un problème.",
+        { retry: true }
+      );
+    }
   }
   document.querySelector("#otp-email").textContent = maskEmail(state.client.email);
   function adaptDigitSpacing() {
@@ -68,9 +131,7 @@
       state.emailVerifiedAt = new Date().toISOString();
       state.verifiedEmail = String(user.email).toLowerCase();
       FinasureStorage.save(state);
-      successBox.textContent = "Adresse vérifiée. Ouverture de votre rapport…";
-      successBox.hidden = false;
-      setTimeout(() => location.replace("rapport-complet.html"), 500);
+      await deliverReport(false);
     } catch (error) {
       errorBox.textContent = error.message || "Le code est incorrect ou a expiré.";
       input.focus();
@@ -96,7 +157,24 @@
       resendButton.disabled = false;
     }
   });
+  retryReportButton.addEventListener("click", () => deliverReport(true));
+
+  async function restoreVerifiedState() {
+    if (!state.emailVerified) return;
+    if (!(await FinasureOtp.hasVerifiedAccess(state))) return;
+    if (state.reportEmailStatus === "failed") {
+      showVerifiedInterface();
+      setDeliveryState(
+        "Envoi du rapport interrompu",
+        state.reportEmailMessage || "L’envoi par email a rencontré un problème.",
+        { retry: true }
+      );
+      return;
+    }
+    await deliverReport(false);
+  }
   startCountdown();
   adaptDigitSpacing();
   input.focus();
+  restoreVerifiedState();
 })();

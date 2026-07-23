@@ -32,6 +32,8 @@
     const dimensions = Array.isArray(results.dimensions)
       ? results.dimensions
       : window.FINASURE_ERM_DATA?.dimensions || [];
+    const strengthIds = new Set((results.strengths || []).map((item) => item.id));
+    const priorityIds = new Set((results.priorities || []).map((item) => item.id));
 
     return {
       idempotency_key: ensureSyncKey(state),
@@ -77,6 +79,18 @@
         level: item.level || "",
         priority_index: Number(item.priorityIndex || 0)
       })),
+      recommendations: dimensions.map((item) => {
+        const recommendation = item.recommendations?.[item.level] || {};
+        return {
+          dimension_id: item.id,
+          dimension_name: item.name,
+          diagnostic: recommendation.diagnostic || "",
+          short_term_actions: recommendation.shortTerm || "",
+          medium_term_actions: recommendation.mediumTerm || "",
+          is_strength: strengthIds.has(item.id),
+          is_priority: priorityIds.has(item.id)
+        };
+      }),
       report_requested: Boolean(options?.reportRequested)
     };
   }
@@ -92,11 +106,21 @@
     try {
       state.syncStatus = "syncing";
       window.FinasureStorage?.save(state);
+      const payload = buildPayload(state, options);
       const { data, error } = await api.client.rpc(
         "submit_assessment",
-        { p_payload: buildPayload(state, options) }
+        { p_payload: payload }
       );
       if (error) throw error;
+      const { error: recommendationsError } = await api.client.rpc(
+        "save_assessment_recommendations",
+        {
+          p_assessment_id: data.assessment_id,
+          p_public_access_token: data.public_access_token,
+          p_recommendations: payload.recommendations
+        }
+      );
+      if (recommendationsError) throw recommendationsError;
       state.remoteAssessmentId = data.assessment_id;
       state.remoteAccessToken = data.public_access_token;
       state.syncStatus = "synced";

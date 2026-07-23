@@ -52,6 +52,10 @@ const otpMigration = fs.readFileSync(
   path.join(root, "supabase/migrations/202607230002_email_otp.sql"),
   "utf8"
 );
+const reportMigration = fs.readFileSync(
+  path.join(root, "supabase/migrations/202607230003_automatic_pdf_reports.sql"),
+  "utf8"
+);
 for (const table of [
   "companies", "respondents", "assessments", "assessment_answers",
   "dimension_scores", "reports", "appointments", "activity_logs"
@@ -66,6 +70,17 @@ for (const field of ["email_verified", "email_verified_at", "auth_user_id"]) {
 }
 for (const rpc of ["verify_assessment_email", "is_assessment_email_verified"]) {
   if (!otpMigration.includes(rpc)) throw new Error(`Fonction OTP absente: ${rpc}`);
+}
+for (const required of [
+  "assessment_recommendations", "recipient_email", "provider_message_id",
+  "save_assessment_recommendations", "'generating'", "'sent'", "'failed'"
+]) {
+  if (!reportMigration.includes(required)) {
+    throw new Error(`Élément de rapport automatique absent: ${required}`);
+  }
+}
+if (!fs.existsSync(path.join(root, "supabase/functions/send-erm-report/index.ts"))) {
+  throw new Error("Edge Function de rapport absente.");
 }
 if (!fs.existsSync(path.join(root, "verification-email.html"))) {
   throw new Error("Page de vérification OTP absente.");

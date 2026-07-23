@@ -73,11 +73,38 @@
     return !error && data === true;
   }
 
+  async function sendReport(state, options) {
+    if (!state.remoteAssessmentId) {
+      throw new Error("L’évaluation associée au rapport est introuvable.");
+    }
+    const { data, error } = await client().functions.invoke("send-erm-report", {
+      body: {
+        assessment_id: state.remoteAssessmentId,
+        resend: Boolean(options?.resend)
+      }
+    });
+    if (error) {
+      let details = null;
+      try {
+        details = await error.context?.json();
+      } catch (_) {
+        details = null;
+      }
+      const reportError = new Error(
+        details?.message || "L’envoi du rapport a rencontré un problème."
+      );
+      reportError.code = details?.error || "report_send_failed";
+      throw reportError;
+    }
+    return data;
+  }
+
   window.FinasureOtp = Object.freeze({
     RESEND_DELAY_SECONDS,
     sendCode,
     verifyCode,
     markAssessmentVerified,
-    hasVerifiedAccess
+    hasVerifiedAccess,
+    sendReport
   });
 })();

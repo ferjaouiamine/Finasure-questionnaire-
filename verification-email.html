@@ -7,7 +7,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/style.css?v=20260723-4">
+  <link rel="stylesheet" href="css/style.css?v=20260723-5">
 </head>
 <body>
   <a class="skip-link" href="#main">Aller au contenu</a>
@@ -26,6 +26,16 @@
         <div id="otp-success" class="notice otp-message" role="status" hidden></div>
         <button id="otp-submit" class="button otp-primary" type="submit">Vérifier et accéder au rapport</button>
       </form>
+      <section id="report-delivery-status" class="report-delivery-status" aria-live="polite" hidden>
+        <div id="report-loader" class="report-loader" aria-hidden="true"></div>
+        <h2 id="report-status-title"></h2>
+        <p id="report-status-message"></p>
+        <div id="report-status-actions" class="report-status-actions" hidden>
+          <a class="button" href="rapport-complet.html">Voir mon rapport</a>
+          <a class="button button-ghost" href="rendez-vous.html">Prendre rendez-vous</a>
+          <button id="retry-report-email" class="text-button" type="button" hidden>Réessayer l’envoi</button>
+        </div>
+      </section>
       <div class="otp-resend"><button id="otp-resend" class="text-button" type="button" disabled>Renvoyer le code</button><span id="otp-countdown" aria-live="polite"></span></div>
       <a class="otp-change-email" href="demande-rapport.html">Modifier mon adresse email</a>
     </section>
@@ -33,6 +43,6 @@
   <footer><a class="brand footer-brand" href="index.html"><img src="assets/logo-finasure.png" alt="Finasure"></a><p>Vérification sécurisée du rapport ERM</p><p>© 2026 Finasure.</p></footer>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="js/questionnaire-data.js"></script><script src="js/storage.js"></script><script src="js/calcul.js"></script>
-  <script src="js/supabase-config.js?v=20260723-4"></script><script src="js/supabase-client.js?v=20260723-4"></script><script src="js/assessment-sync.js?v=20260723-4"></script><script src="js/otp-auth.js?v=20260723-4"></script><script src="js/verification-email.js?v=20260723-4"></script>
+  <script src="js/supabase-config.js?v=20260723-5"></script><script src="js/supabase-client.js?v=20260723-5"></script><script src="js/assessment-sync.js?v=20260723-5"></script><script src="js/otp-auth.js?v=20260723-5"></script><script src="js/verification-email.js?v=20260723-5"></script>
 </body>
 </html>
