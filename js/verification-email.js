@@ -35,8 +35,17 @@
     timer = setInterval(render, 1000);
   }
   document.querySelector("#otp-email").textContent = maskEmail(state.client.email);
+  input.addEventListener("beforeinput", (event) => {
+    if (event.data !== null && !/^\d+$/.test(event.data)) event.preventDefault();
+  });
+  input.addEventListener("paste", (event) => {
+    const pasted = event.clipboardData?.getData("text") || "";
+    if (!/^\d+$/.test(pasted)) {
+      event.preventDefault();
+      errorBox.textContent = "Le code doit contenir uniquement des chiffres.";
+    }
+  });
   input.addEventListener("input", () => {
-    input.value = input.value.replace(/\D/g, "").slice(0, 6);
     errorBox.textContent = "";
   });
   form.addEventListener("submit", async (event) => {

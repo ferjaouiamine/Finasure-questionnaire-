@@ -29,9 +29,9 @@
   }
 
   async function verifyCode(email, token) {
-    const code = String(token || "").replace(/\D/g, "");
-    if (!/^\d{6}$/.test(code)) {
-      throw new Error("Saisissez le code à 6 chiffres reçu par email.");
+    const code = String(token || "");
+    if (!/^\d+$/.test(code)) {
+      throw new Error("Saisissez uniquement les chiffres du code reçu par email.");
     }
     const { data, error } = await client().auth.verifyOtp({
       email: normalizeEmail(email),

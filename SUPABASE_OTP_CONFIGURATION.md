@@ -16,7 +16,7 @@ Dans **Authentication > Sign In / Providers > Email** :
 
 - activer le fournisseur Email ;
 - autoriser la création d’utilisateurs ;
-- conserver un OTP de 6 chiffres ;
+- conserver la longueur de code configurée dans Supabase ;
 - choisir une expiration courte, par exemple 10 minutes.
 
 ## Modèle du code OTP

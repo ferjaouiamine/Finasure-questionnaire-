@@ -70,5 +70,13 @@ for (const rpc of ["verify_assessment_email", "is_assessment_email_verified"]) {
 if (!fs.existsSync(path.join(root, "verification-email.html"))) {
   throw new Error("Page de vérification OTP absente.");
 }
+const otpHtml = fs.readFileSync(path.join(root, "verification-email.html"), "utf8");
+const otpJavascript = [
+  fs.readFileSync(path.join(root, "js/otp-auth.js"), "utf8"),
+  fs.readFileSync(path.join(root, "js/verification-email.js"), "utf8")
+].join("\n");
+if (/6 chiffres|maxlength=["']6["']|\[0-9\]\{6\}|\\d\{6\}/i.test(`${otpHtml}\n${otpJavascript}`)) {
+  throw new Error("Une contrainte OTP à 6 chiffres subsiste.");
+}
 
 console.log("Validation réussie : données, calculs, pages admin et migration.");
