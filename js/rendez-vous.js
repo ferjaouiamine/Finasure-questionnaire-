@@ -161,7 +161,7 @@
     renderCalendar();
   });
 
-  form.addEventListener("submit", (event) => {
+  form.addEventListener("submit", async (event) => {
     event.preventDefault();
     clearErrors();
     const values = Object.fromEntries(new FormData(form).entries());
@@ -213,6 +213,10 @@
       box.hidden = false;
       return;
     }
+    await window.FinasureAssessmentSync?.syncAppointment(
+      state,
+      state.booking.appointment
+    );
     const success = document.querySelector("#appointment-success");
     success.hidden = false;
     success.scrollIntoView({ behavior: "smooth", block: "center" });

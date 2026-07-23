@@ -23,6 +23,11 @@
   let results;
   try {
     results = FinasureCalcul.calculate(data, state.answers);
+    if (state.syncStatus !== "synced") {
+      window.FinasureAssessmentSync?.syncAssessment(state, {
+        reportRequested: true
+      });
+    }
     renderClient();
     renderResults();
   } catch (error) {
@@ -107,6 +112,7 @@
   }
 
   document.querySelector("#print-report-button").addEventListener("click", () => {
+    window.FinasureAssessmentSync?.recordReportDownload(state);
     const panels = [...document.querySelectorAll(".accordion-panel")], states = panels.map((panel) => panel.hidden);
     panels.forEach((panel) => { panel.hidden = false; });
     const restore = () => panels.forEach((panel, index) => { panel.hidden = states[index]; });

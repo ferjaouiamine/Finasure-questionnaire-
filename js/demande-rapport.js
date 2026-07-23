@@ -28,7 +28,7 @@
     if (field) invalidFields.push(field);
   }
 
-  form.addEventListener("submit", (event) => {
+  form.addEventListener("submit", async (event) => {
     event.preventDefault();
     clearErrors();
     const values = Object.fromEntries(new FormData(form).entries());
@@ -73,6 +73,14 @@
       box.hidden = false;
       return;
     }
+    const submitButton = form.querySelector('[type="submit"]');
+    if (submitButton) {
+      submitButton.disabled = true;
+      submitButton.textContent = "Enregistrement…";
+    }
+    await window.FinasureAssessmentSync?.syncAssessment(state, {
+      reportRequested: true
+    });
     location.href = "rapport-complet.html";
   });
 })();
