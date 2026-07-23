@@ -35,6 +35,11 @@
     timer = setInterval(render, 1000);
   }
   document.querySelector("#otp-email").textContent = maskEmail(state.client.email);
+  function adaptDigitSpacing() {
+    const digitCount = Math.max(input.value.length, 1);
+    const spacing = Math.max(0.08, Math.min(0.45, 3.2 / digitCount));
+    input.style.setProperty("--otp-spacing", `${spacing}em`);
+  }
   input.addEventListener("beforeinput", (event) => {
     if (event.data !== null && !/^\d+$/.test(event.data)) event.preventDefault();
   });
@@ -47,6 +52,7 @@
   });
   input.addEventListener("input", () => {
     errorBox.textContent = "";
+    adaptDigitSpacing();
   });
   form.addEventListener("submit", async (event) => {
     event.preventDefault();
@@ -91,5 +97,6 @@
     }
   });
   startCountdown();
+  adaptDigitSpacing();
   input.focus();
 })();
