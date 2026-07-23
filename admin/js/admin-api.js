@@ -19,13 +19,13 @@
   }
   async function company(id){return check(await db().from("companies").select("*,respondents(*),assessments(*,dimension_scores(*),reports(*),appointments(*))").eq("id",id).single()).data;}
   async function assessments(params){
-    let q=db().from("assessments").select("*,companies(name,sector),respondents(first_name,last_name,email)",{count:"exact"});
+    let q=db().from("assessments").select("*,companies(name,sector),respondents(first_name,last_name,email,email_verified,email_verified_at)",{count:"exact"});
     if(params.level)q=q.eq("global_level",params.level);if(params.fromDate)q=q.gte("completed_at",params.fromDate);if(params.toDate)q=q.lte("completed_at",`${params.toDate}T23:59:59`);
     q=q.order("completed_at",{ascending:false}).range(params.from,params.to);return check(await q);
   }
   async function assessment(id){return check(await db().from("assessments").select("*,companies(*),respondents(*),assessment_answers(*),dimension_scores(*),reports(*),appointments(*)").eq("id",id).single()).data;}
-  async function reports(){return check(await db().from("reports").select("*,assessments(global_score,global_level,companies(name),respondents(first_name,last_name,email))").order("created_at",{ascending:false})).data;}
-  async function appointments(){return check(await db().from("appointments").select("*,assessments(companies(name),respondents(first_name,last_name,email,phone))").order("created_at",{ascending:false})).data;}
+  async function reports(){return check(await db().from("reports").select("*,assessments(global_score,global_level,companies(name),respondents(first_name,last_name,email,email_verified))").order("created_at",{ascending:false})).data;}
+  async function appointments(){return check(await db().from("appointments").select("*,assessments(companies(name),respondents(first_name,last_name,email,phone,email_verified))").order("created_at",{ascending:false})).data;}
   async function activity(){return check(await db().from("activity_logs").select("*,companies(name),assessments(global_score)").order("created_at",{ascending:false}).limit(250)).data;}
   window.AdminApi=Object.freeze({dashboard,companies,company,assessments,assessment,reports,appointments,activity});
 })();

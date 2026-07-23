@@ -1,4 +1,4 @@
-(function () {
+(async function () {
   "use strict";
   const APPOINTMENT_URL = "rendez-vous.html";
   const data = window.FINASURE_ERM_DATA;
@@ -17,6 +17,13 @@
   }
   if (!clientValid) {
     location.href = "demande-rapport.html";
+    return;
+  }
+  const locallyVerified =
+    state.emailVerified &&
+    String(state.verifiedEmail).toLowerCase() === String(client.email).toLowerCase();
+  if (!locallyVerified || !(await window.FinasureOtp.hasVerifiedAccess(state))) {
+    location.replace("verification-email.html");
     return;
   }
 

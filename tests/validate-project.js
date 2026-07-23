@@ -48,6 +48,10 @@ const migration = fs.readFileSync(
   path.join(root, "supabase/migrations/202607230001_initial_erm_admin.sql"),
   "utf8"
 );
+const otpMigration = fs.readFileSync(
+  path.join(root, "supabase/migrations/202607230002_email_otp.sql"),
+  "utf8"
+);
 for (const table of [
   "companies", "respondents", "assessments", "assessment_answers",
   "dimension_scores", "reports", "appointments", "activity_logs"
@@ -56,6 +60,15 @@ for (const table of [
 }
 if ((migration.match(/enable row level security/g) || []).length < 9) {
   throw new Error("RLS incomplète.");
+}
+for (const field of ["email_verified", "email_verified_at", "auth_user_id"]) {
+  if (!otpMigration.includes(field)) throw new Error(`Champ OTP absent: ${field}`);
+}
+for (const rpc of ["verify_assessment_email", "is_assessment_email_verified"]) {
+  if (!otpMigration.includes(rpc)) throw new Error(`Fonction OTP absente: ${rpc}`);
+}
+if (!fs.existsSync(path.join(root, "verification-email.html"))) {
+  throw new Error("Page de vérification OTP absente.");
 }
 
 console.log("Validation réussie : données, calculs, pages admin et migration.");

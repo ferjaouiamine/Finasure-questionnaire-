@@ -52,6 +52,7 @@
       return;
     }
 
+    const previousEmail = String(state.client?.email || "").trim().toLowerCase();
     state.client = {
       ...state.client,
       company: String(values.company).trim(),
@@ -66,6 +67,17 @@
     };
     state.leadFormCompleted = true;
     state.clientFormCompleted = true;
+    if (previousEmail !== values.email.toLowerCase()) {
+      state.emailVerified = false;
+      state.emailVerifiedAt = "";
+      state.verifiedEmail = "";
+      if (state.remoteAssessmentId) {
+        state.syncKey = "";
+        state.syncStatus = "local";
+        state.remoteAssessmentId = "";
+        state.remoteAccessToken = "";
+      }
+    }
 
     if (!FinasureStorage.save(state)) {
       const box = document.querySelector("#lead-page-error");
@@ -78,9 +90,23 @@
       submitButton.disabled = true;
       submitButton.textContent = "Enregistrement…";
     }
-    await window.FinasureAssessmentSync?.syncAssessment(state, {
-      reportRequested: true
-    });
-    location.href = "rapport-complet.html";
+    try {
+      await window.FinasureAssessmentSync?.syncAssessment(state, {
+        reportRequested: true
+      });
+      await window.FinasureOtp.sendCode(state.client.email);
+      state.otpSentAt = new Date().toISOString();
+      state.emailVerified = false;
+      FinasureStorage.save(state);
+      location.href = "verification-email.html";
+    } catch (error) {
+      const box = document.querySelector("#lead-page-error");
+      box.textContent = error.message || "Impossible d’envoyer le code de vérification.";
+      box.hidden = false;
+      if (submitButton) {
+        submitButton.disabled = false;
+        submitButton.textContent = "Accéder à mon rapport complet →";
+      }
+    }
   });
 })();

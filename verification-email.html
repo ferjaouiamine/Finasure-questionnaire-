@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Vérification de votre email | Finasure</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <a class="skip-link" href="#main">Aller au contenu</a>
+  <header class="site-header"><a class="brand" href="index.html"><img src="assets/logo-finasure.png" alt="Finasure — Assurance et Réassurance"></a></header>
+  <main id="main" class="otp-page">
+    <section class="otp-card" aria-labelledby="otp-title">
+      <p class="eyebrow"><span></span> Sécurisation du rapport</p>
+      <h1 id="otp-title" class="page-title">Vérifiez votre adresse email</h1>
+      <p>Un code de vérification a été envoyé à votre adresse email.</p>
+      <p id="otp-email" class="otp-email"></p>
+      <form id="otp-form" novalidate>
+        <label for="otp-code">Code de vérification à 6 chiffres</label>
+        <input id="otp-code" class="otp-input" name="code" type="text" inputmode="numeric" autocomplete="one-time-code" maxlength="6" pattern="[0-9]{6}" aria-describedby="otp-help otp-error" required>
+        <small id="otp-help">Le code est temporaire et ne peut être utilisé qu’une seule fois.</small>
+        <div id="otp-error" class="field-error otp-message" role="alert"></div>
+        <div id="otp-success" class="notice otp-message" role="status" hidden></div>
+        <button id="otp-submit" class="button otp-primary" type="submit">Vérifier et accéder au rapport</button>
+      </form>
+      <div class="otp-resend"><button id="otp-resend" class="text-button" type="button" disabled>Renvoyer le code</button><span id="otp-countdown" aria-live="polite"></span></div>
+      <a class="otp-change-email" href="demande-rapport.html">Modifier mon adresse email</a>
+    </section>
+  </main>
+  <footer><a class="brand footer-brand" href="index.html"><img src="assets/logo-finasure.png" alt="Finasure"></a><p>Vérification sécurisée du rapport ERM</p><p>© 2026 Finasure.</p></footer>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/questionnaire-data.js"></script><script src="js/storage.js"></script><script src="js/calcul.js"></script>
+  <script src="js/supabase-config.js?v=20260723-2"></script><script src="js/supabase-client.js?v=20260723-2"></script><script src="js/assessment-sync.js?v=20260723-2"></script><script src="js/otp-auth.js?v=20260723-2"></script><script src="js/verification-email.js?v=20260723-2"></script>
+</body>
+</html>
