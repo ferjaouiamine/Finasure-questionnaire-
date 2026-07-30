@@ -9,6 +9,10 @@
   const previous = document.querySelector("#previous-button");
   const next = document.querySelector("#next-button");
   const totalQuestions = data?.questions?.length || 0;
+  const mobileViewport = window.matchMedia("(max-width: 768px)");
+  const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+  let isTransitioning = false;
+  let mobileTransitionTimer = null;
 
   if (!data?.questions || totalQuestions !== 33 || data.steps.length !== 4) {
     showError("Les données du questionnaire sont absentes ou incomplètes.");
@@ -177,6 +181,68 @@
       .setAttribute("aria-valuenow", String(completed));
   }
 
+  function scrollToMobileTarget(target) {
+    if (!target) return;
+    requestAnimationFrame(() => {
+      target.scrollIntoView({
+        behavior: reducedMotion.matches ? "auto" : "smooth",
+        block: "start"
+      });
+    });
+  }
+
+  function releaseMobileTransition() {
+    window.setTimeout(() => {
+      isTransitioning = false;
+    }, reducedMotion.matches ? 0 : 400);
+  }
+
+  function cancelMobileTransition() {
+    window.clearTimeout(mobileTransitionTimer);
+    mobileTransitionTimer = null;
+    isTransitioning = false;
+  }
+
+  function handleMobileAnswerSelection(questionId) {
+    if (!mobileViewport.matches || isTransitioning) return;
+
+    const [start, end] = data.steps[step];
+    if (questionId < start || questionId > end) return;
+
+    isTransitioning = true;
+    window.clearTimeout(mobileTransitionTimer);
+    mobileTransitionTimer = window.setTimeout(() => {
+      if (questionId < end) {
+        scrollToMobileTarget(
+          document.querySelector(`[data-question="${questionId + 1}"]`)
+        );
+        releaseMobileTransition();
+        return;
+      }
+
+      if (step < data.steps.length - 1) {
+        const stepComplete = data.questions
+          .filter((question) => question.id >= start && question.id <= end)
+          .every((question) => {
+            const answer = Number(state.answers[question.id]);
+            return answer >= 1 && answer <= 5;
+          });
+
+        if (stepComplete) {
+          step += 1;
+          render();
+          scrollToMobileTarget(list.querySelector(".question-card"));
+        }
+        releaseMobileTransition();
+        return;
+      }
+
+      // La dernière réponse reste soumise par l’action finale existante.
+      scrollToMobileTarget(document.querySelector(".questionnaire-actions"));
+      releaseMobileTransition();
+    }, reducedMotion.matches ? 0 : 250);
+  }
+
   function showError(text) {
     const box = document.querySelector("#app-error");
     box.textContent = text;
@@ -190,9 +256,11 @@
     event.target.closest(".question-card").classList.remove("unanswered");
     persist();
     updateProgress();
+    handleMobileAnswerSelection(Number(id));
   });
 
   previous.addEventListener("click", () => {
+    cancelMobileTransition();
     if (step > 0) {
       step -= 1;
       render();
@@ -202,6 +270,7 @@
 
   form.addEventListener("submit", (event) => {
     event.preventDefault();
+    cancelMobileTransition();
     const [start, end] = data.steps[step];
     const missing = [];
 

@@ -116,3 +116,5 @@
 @media(prefers-reduced-motion:reduce){.erm-stepper li.active .step-marker{animation:none}}
 @media(max-width:768px){.view-home .hero-grid{padding-top:52px;padding-bottom:46px}.home-final-cta{padding-top:28px;padding-bottom:46px}.questionnaire-view{padding-top:24px}.erm-stepper li{padding:0 2px;font-size:10px}.erm-stepper li::before{top:18px}.step-marker{width:38px;height:38px}.step-short-label{margin-top:6px}.progress-panel{margin-top:6px}}
 @media(max-width:390px){.erm-stepper li{font-size:9px}.step-marker{width:34px;height:34px}.erm-stepper li::before{top:16px}.step-short-label{letter-spacing:-.02em}}
+.question-card,.questionnaire-actions{scroll-margin-top:100px}
+@media(max-width:768px){html,body{max-width:100%;overflow-x:hidden}.question-card,.questionnaire-actions{scroll-margin-top:88px}}
