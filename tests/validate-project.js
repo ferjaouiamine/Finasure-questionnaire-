@@ -10,6 +10,11 @@ vm.runInContext(
   context
 );
 vm.runInContext(
+  fs.readFileSync(path.join(root, "supabase/functions/_shared/maturity.js"), "utf8"),
+  context
+);
+context.window.FinasureMaturity = context.FinasureMaturity;
+vm.runInContext(
   fs.readFileSync(path.join(root, "js/calcul.js"), "utf8"),
   context
 );

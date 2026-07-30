@@ -118,3 +118,22 @@
 @media(max-width:390px){.erm-stepper li{font-size:9px}.step-marker{width:34px;height:34px}.erm-stepper li::before{top:16px}.step-short-label{letter-spacing:-.02em}}
 .question-card,.questionnaire-actions{scroll-margin-top:100px}
 @media(max-width:768px){html,body{max-width:100%;overflow-x:hidden}.question-card,.questionnaire-actions{scroll-margin-top:88px}}
+
+/* Niveaux de maturité partagés par le rapport web et le PDF. */
+.maturity-card{border-color:var(--level-border)}
+.global-result #global-level{display:inline-flex;align-items:center;width:fit-content;padding:.35rem .75rem;color:var(--level-text);background:var(--level-bg);border:1px solid var(--level-border);border-radius:999px}
+.rank-maturity-badge{display:inline-flex;width:fit-content;padding:.25rem .6rem;color:var(--level-text);background:var(--level-bg);border:1px solid var(--level-border);border-radius:999px}
+.dimension-maturity-meta{display:flex;align-items:center;gap:9px;flex-wrap:wrap;margin:12px 0;color:var(--muted);font-size:11px}
+.maturity-level-badge,.maturity-score{color:var(--level-text);background:var(--level-bg);border:1px solid var(--level-border)}
+.maturity-score{border-radius:20px;padding:5px 9px;white-space:nowrap}
+.maturity-bar i{background:var(--level-text)}
+.maturity-grid{display:grid;gap:12px}
+.maturity-grid-row{display:grid;grid-template-columns:150px 1fr 1.35fr 1fr;gap:16px;padding:18px;border:1px solid var(--level-border);border-radius:12px;background:var(--level-bg);break-inside:avoid}
+.maturity-grid-heading{display:grid;grid-template-columns:auto 1fr;align-content:start;align-items:center;gap:2px 8px;color:var(--level-text)}
+.maturity-grid-heading small{grid-column:2;color:var(--ink)}
+.maturity-grid-dot{width:10px;height:10px;border-radius:50%;background:var(--level-text)}
+.maturity-grid-field strong{display:block;margin-bottom:5px;color:var(--navy);font-size:11px}
+.maturity-grid-field p{margin:0;color:var(--ink);font-size:11px;line-height:1.5}
+@media(max-width:900px){.maturity-grid-row{grid-template-columns:1fr 1fr}.maturity-grid-heading{grid-column:1/-1}}
+@media(max-width:600px){.maturity-grid-row{grid-template-columns:1fr;padding:15px}.maturity-grid-heading{grid-column:auto}.maturity-grid-field p{font-size:12px}}
+@media print{.maturity-grid-row{grid-template-columns:125px 1fr 1.2fr 1fr;gap:9px;padding:10px}.maturity-grid-field p{font-size:8px}.maturity-grid-field strong{font-size:8px}}

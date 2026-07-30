@@ -41,10 +41,6 @@
   }
 
   function interpretation(score) {
-    if (score <= 1.8) return "Votre dispositif nécessite une structuration progressive de ses pratiques essentielles.";
-    if (score <= 2.6) return "Plusieurs pratiques sont engagées, mais leur application doit encore être renforcée.";
-    if (score <= 3.4) return "Votre dispositif est structuré et dispose de possibilités d’amélioration ciblées.";
-    if (score <= 4.2) return "La gestion des risques est bien intégrée et soutient efficacement les décisions.";
-    return "Votre dispositif est pleinement intégré, piloté et continuellement amélioré.";
+    return window.FinasureMaturity.getMaturityLevel(score).interpretation;
   }
 })();

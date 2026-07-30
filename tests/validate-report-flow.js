@@ -39,6 +39,10 @@ context.FinasureSupabase = {
   }
 };
 vm.createContext(context);
+vm.runInContext(
+  fs.readFileSync(path.resolve(__dirname, "../supabase/functions/_shared/maturity.js"), "utf8"),
+  context
+);
 for (const file of ["questionnaire-data.js", "storage.js", "calcul.js", "assessment-sync.js"]) {
   vm.runInContext(fs.readFileSync(path.resolve(__dirname, `../js/${file}`), "utf8"), context);
 }
