@@ -8,11 +8,11 @@
   const message = document.querySelector("#validation-message");
   const previous = document.querySelector("#previous-button");
   const next = document.querySelector("#next-button");
+  const actions = document.querySelector(".questionnaire-actions");
   const totalQuestions = data?.questions?.length || 0;
-  const mobileViewport = window.matchMedia("(max-width: 768px)");
   const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
   let isTransitioning = false;
-  let mobileTransitionTimer = null;
+  let transitionTimer = null;
 
   if (!data?.questions || totalQuestions !== 33 || data.steps.length !== 4) {
     showError("Les données du questionnaire sont absentes ou incomplètes.");
@@ -160,7 +160,14 @@
     list.replaceChildren(fragment);
 
     previous.hidden = step === 0;
-    next.textContent = step === 3 ? "Voir mes résultats →" : "Suivant →";
+    const stepComplete = questions.every((question) => {
+      const answer = Number(state.answers[question.id]);
+      return answer >= 1 && answer <= 5;
+    });
+    const isFinalStep = step === data.steps.length - 1;
+    next.hidden = !isFinalStep && !stepComplete;
+    next.textContent = isFinalStep ? "Voir mes résultats →" : "Continuer →";
+    actions.hidden = previous.hidden && next.hidden;
     state.currentStep = step + 1;
     persist();
     updateProgress();
@@ -181,7 +188,7 @@
       .setAttribute("aria-valuenow", String(completed));
   }
 
-  function scrollToMobileTarget(target) {
+  function scrollToTarget(target) {
     if (!target) return;
     requestAnimationFrame(() => {
       target.scrollIntoView({
@@ -191,32 +198,32 @@
     });
   }
 
-  function releaseMobileTransition() {
+  function releaseTransition() {
     window.setTimeout(() => {
       isTransitioning = false;
     }, reducedMotion.matches ? 0 : 400);
   }
 
-  function cancelMobileTransition() {
-    window.clearTimeout(mobileTransitionTimer);
-    mobileTransitionTimer = null;
+  function cancelTransition() {
+    window.clearTimeout(transitionTimer);
+    transitionTimer = null;
     isTransitioning = false;
   }
 
-  function handleMobileAnswerSelection(questionId) {
-    if (!mobileViewport.matches || isTransitioning) return;
+  function handleAnswerSelection(questionId) {
+    if (isTransitioning) return;
 
     const [start, end] = data.steps[step];
     if (questionId < start || questionId > end) return;
 
     isTransitioning = true;
-    window.clearTimeout(mobileTransitionTimer);
-    mobileTransitionTimer = window.setTimeout(() => {
+    window.clearTimeout(transitionTimer);
+    transitionTimer = window.setTimeout(() => {
       if (questionId < end) {
-        scrollToMobileTarget(
+        scrollToTarget(
           document.querySelector(`[data-question="${questionId + 1}"]`)
         );
-        releaseMobileTransition();
+        releaseTransition();
         return;
       }
 
@@ -231,15 +238,15 @@
         if (stepComplete) {
           step += 1;
           render();
-          scrollToMobileTarget(list.querySelector(".question-card"));
+          scrollToTarget(list.querySelector(".question-card"));
         }
-        releaseMobileTransition();
+        releaseTransition();
         return;
       }
 
       // La dernière réponse reste soumise par l’action finale existante.
-      scrollToMobileTarget(document.querySelector(".questionnaire-actions"));
-      releaseMobileTransition();
+      scrollToTarget(document.querySelector(".questionnaire-actions"));
+      releaseTransition();
     }, reducedMotion.matches ? 0 : 250);
   }
 
@@ -256,11 +263,11 @@
     event.target.closest(".question-card").classList.remove("unanswered");
     persist();
     updateProgress();
-    handleMobileAnswerSelection(Number(id));
+    handleAnswerSelection(Number(id));
   });
 
   previous.addEventListener("click", () => {
-    cancelMobileTransition();
+    cancelTransition();
     if (step > 0) {
       step -= 1;
       render();
@@ -270,7 +277,7 @@
 
   form.addEventListener("submit", (event) => {
     event.preventDefault();
-    cancelMobileTransition();
+    cancelTransition();
     const [start, end] = data.steps[step];
     const missing = [];
 
