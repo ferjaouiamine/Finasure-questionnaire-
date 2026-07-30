@@ -118,20 +118,34 @@
       (question) => question.id >= start && question.id <= end
     );
 
-    document.querySelector("#step-label").textContent = `Étape ${step + 1}`;
-    document.querySelector("#question-range").textContent =
-      data.stepNames?.[step] || "Étape en cours";
+    document.querySelector("#step-label").textContent =
+      `Étape ${step + 1} sur ${data.steps.length}`;
 
     const indicator = document.querySelector("#step-indicator");
     indicator.replaceChildren(
       ...data.steps.map((_, index) => {
-        const item = createElement(
-          "li",
-          index === step ? "active" : "",
-          String(index + 1)
+        const stateClass =
+          index < step ? "completed" : index === step ? "active" : "future";
+        const item = createElement("li", stateClass);
+        const marker = createElement(
+          "span",
+          "step-marker",
+          index < step ? "✓" : String(index + 1)
+        );
+        const label = createElement(
+          "span",
+          "step-short-label",
+          `Étape ${index + 1}`
+        );
+        marker.setAttribute("aria-hidden", "true");
+        item.append(marker, label);
+        item.setAttribute(
+          "aria-label",
+          `Étape ${index + 1}, ${
+            index < step ? "terminée" : index === step ? "en cours" : "à venir"
+          }`
         );
         if (index === step) item.setAttribute("aria-current", "step");
-        item.title = data.stepNames?.[index] || `Étape ${index + 1}`;
         return item;
       })
     );
