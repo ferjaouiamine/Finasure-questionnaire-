@@ -23,7 +23,10 @@
   const locallyVerified =
     state.emailVerified &&
     String(state.verifiedEmail).toLowerCase() === String(client.email).toLowerCase();
-  if (!locallyVerified || !(await window.FinasureOtp.hasVerifiedAccess(state))) {
+  const otpBypassForTesting =
+    window.FINASURE_SUPABASE_CONFIG?.otpBypassForTesting === true;
+  if (!otpBypassForTesting &&
+      (!locallyVerified || !(await window.FinasureOtp.hasVerifiedAccess(state)))) {
     location.replace("verification-email.html");
     return;
   }

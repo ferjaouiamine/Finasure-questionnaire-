@@ -94,6 +94,12 @@
       await window.FinasureAssessmentSync?.syncAssessment(state, {
         reportRequested: true
       });
+      if (window.FINASURE_SUPABASE_CONFIG?.otpBypassForTesting === true) {
+        state.otpBypassUsed = true;
+        FinasureStorage.save(state);
+        location.href = "rapport-complet.html";
+        return;
+      }
       await window.FinasureOtp.sendCode(state.client.email);
       state.otpSentAt = new Date().toISOString();
       state.emailVerified = false;

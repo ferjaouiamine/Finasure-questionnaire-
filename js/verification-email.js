@@ -16,6 +16,11 @@
   const retryReportButton = document.querySelector("#retry-report-email");
   let timer;
 
+  if (window.FINASURE_SUPABASE_CONFIG?.otpBypassForTesting === true) {
+    location.replace("rapport-complet.html");
+    return;
+  }
+
   if (!state.questionnaireCompleted || !state.leadFormCompleted || !state.client?.email) {
     location.replace("demande-rapport.html");
     return;
