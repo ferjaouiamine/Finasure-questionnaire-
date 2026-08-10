@@ -52,7 +52,17 @@ Deno.serve(async (request) => {
     .eq("public_access_token", body.public_access_token)
     .single();
 
-  if (assessmentError || !assessment) return json({ error: "assessment_access_denied" }, 403);
+  if (assessmentError) {
+    console.error("Personalized report assessment lookup failed", {
+      code: assessmentError.code,
+      message: assessmentError.message,
+    });
+    if (assessmentError.code === "PGRST116") {
+      return json({ error: "assessment_access_denied" }, 403);
+    }
+    return json({ error: "database_query_failed" }, 500);
+  }
+  if (!assessment) return json({ error: "assessment_access_denied" }, 403);
   const report = Array.isArray(assessment.reports) ? assessment.reports[0] : assessment.reports;
   if (!report) return json({ error: "report_record_missing" }, 409);
 
