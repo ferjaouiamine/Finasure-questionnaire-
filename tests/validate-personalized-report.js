@@ -29,6 +29,8 @@ assert(confirmation.includes('href="rendez-vous.html"'));
 assert(edge.includes('.eq("public_access_token", body.public_access_token)'));
 assert(edge.includes('.is("personalized_status", null)'));
 assert(edge.includes("contact@finasure-solutions.com"));
+assert(edge.includes('FINASURE_REPORT_NOTIFICATION_ENABLED'));
+assert(edge.includes('notification_pending: true'));
 assert(edge.includes('recorded: true'));
 assert(migration.includes("personalized_status"));
 assert(migration.includes("personalized_report_requested"));

@@ -23,7 +23,8 @@ Deno.serve(async (request) => {
   const resendKey = Deno.env.get("RESEND_API_KEY");
   const fromEmail = Deno.env.get("FINASURE_FROM_EMAIL");
   const contactEmail = Deno.env.get("FINASURE_CONTACT_EMAIL") || "contact@finasure-solutions.com";
-  if (!supabaseUrl || !serviceKey || !resendKey || !fromEmail) {
+  const notificationEnabled = Deno.env.get("FINASURE_REPORT_NOTIFICATION_ENABLED") === "true";
+  if (!supabaseUrl || !serviceKey || (notificationEnabled && (!resendKey || !fromEmail))) {
     return json({ error: "server_configuration_missing" }, 500);
   }
 
@@ -86,6 +87,18 @@ Deno.serve(async (request) => {
     metadata: { source: "full_report_page" },
   });
 
+  // L'enregistrement reste actif même lorsque la notification interne est en pause.
+  // Pour activer l'email plus tard, définir le secret serveur
+  // FINASURE_REPORT_NOTIFICATION_ENABLED=true.
+  if (!notificationEnabled) {
+    return json({
+      recorded: true,
+      notification_sent: false,
+      notification_pending: true,
+      message: "Votre demande de rapport personnalisÃ© a bien Ã©tÃ© enregistrÃ©e.",
+    });
+  }
+
   const company = Array.isArray(assessment.companies) ? assessment.companies[0] : assessment.companies;
   const respondent = Array.isArray(assessment.respondents) ? assessment.respondents[0] : assessment.respondents;
   const completedDate = assessment.completed_at
@@ -111,12 +124,12 @@ Deno.serve(async (request) => {
     const resendResponse = await fetch("https://api.resend.com/emails", {
       method: "POST",
       headers: {
-        Authorization: `Bearer ${resendKey}`,
+        Authorization: `Bearer ${resendKey!}`,
         "Content-Type": "application/json",
         "Idempotency-Key": `personalized-report-${assessment.id}`,
       },
       body: JSON.stringify({
-        from: fromEmail,
+        from: fromEmail!,
         to: [contactEmail],
         subject: "Nouvelle demande de rapport personnalisé Finasure ERM",
         html: emailHtml,
