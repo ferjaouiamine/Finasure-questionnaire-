@@ -2,3 +2,6 @@ project_id = "dwvkbpgibfgwrlxxzfaj"
 
 [functions.send-erm-report]
 verify_jwt = true
+
+[functions.request-personalized-report]
+verify_jwt = false

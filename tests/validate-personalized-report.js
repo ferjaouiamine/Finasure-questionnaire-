@@ -1,0 +1,36 @@
+const fs = require("fs");
+const path = require("path");
+const assert = require("assert");
+const root = path.resolve(__dirname, "..");
+const read = (file) => fs.readFileSync(path.join(root, file), "utf8");
+
+const questionnaire = read("questionnaire.html");
+const questionnaireJs = read("js/questionnaire.js");
+const lead = read("demande-rapport.html");
+const report = read("rapport-complet.html");
+const reportJs = read("js/rapport-complet.js");
+const requestJs = read("js/report-request.js");
+const confirmation = read("demande-rapport-confirmee.html");
+const edge = read("supabase/functions/request-personalized-report/index.ts");
+const migration = read("supabase/migrations/202608100001_personalized_report_requests.sql");
+
+assert(questionnaire.includes("Démarrer votre diagnostic ERM"));
+assert(questionnaireJs.includes('"Vos résultats →"'));
+assert(lead.includes("Accéder à mon rapport →"));
+assert(report.includes("Recevoir le rapport complet gratuit en PDF"));
+assert.strictEqual((report.match(/client-hidden-section/g) || []).length, 3);
+assert(!reportJs.includes("window.print("));
+assert(reportJs.includes("requestInProgress"));
+assert(requestJs.includes('functions.invoke(\n      "request-personalized-report"'));
+assert(requestJs.includes("public_access_token"));
+assert(!requestJs.includes("RESEND_API_KEY"));
+assert(confirmation.includes("délai maximum de 48 heures"));
+assert(confirmation.includes('href="rendez-vous.html"'));
+assert(edge.includes('.eq("public_access_token", body.public_access_token)'));
+assert(edge.includes('.is("personalized_status", null)'));
+assert(edge.includes("contact@finasure-solutions.com"));
+assert(edge.includes('recorded: true'));
+assert(migration.includes("personalized_status"));
+assert(migration.includes("personalized_report_requested"));
+
+console.log("Validation réussie : demande personnalisée, anti-doublon, notification et confirmation.");

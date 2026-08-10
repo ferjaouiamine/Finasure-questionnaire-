@@ -166,7 +166,7 @@
     });
     const isFinalStep = step === data.steps.length - 1;
     next.hidden = !isFinalStep && !stepComplete;
-    next.textContent = isFinalStep ? "Voir mes résultats →" : "Continuer →";
+    next.textContent = isFinalStep ? "Vos résultats →" : "Continuer →";
     actions.hidden = previous.hidden && next.hidden;
     state.currentStep = step + 1;
     persist();

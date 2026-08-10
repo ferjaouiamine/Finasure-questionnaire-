@@ -180,13 +180,33 @@
     document.querySelector("#comments-section").hidden = false;
   }
 
-  document.querySelector("#print-report-button").addEventListener("click", () => {
-    window.FinasureAssessmentSync?.recordReportDownload(state);
-    const panels = [...document.querySelectorAll(".accordion-panel")], states = panels.map((panel) => panel.hidden);
-    panels.forEach((panel) => { panel.hidden = false; });
-    const restore = () => panels.forEach((panel, index) => { panel.hidden = states[index]; });
-    window.addEventListener("afterprint", restore, { once: true });
-    window.print();
+  let requestInProgress = false;
+  const requestButton = document.querySelector("#request-personalized-report-button");
+  requestButton.addEventListener("click", async () => {
+    if (requestInProgress) return;
+    requestInProgress = true;
+    requestButton.disabled = true;
+    const label = requestButton.querySelector("span");
+    const originalLabel = label.textContent;
+    label.textContent = "Envoi de votre demande…";
+    const errorBox = document.querySelector("#report-error");
+    errorBox.hidden = true;
+
+    try {
+      const response = await window.FinasureReportRequest.request(state);
+      state.personalizedReportRequested = true;
+      state.personalizedReportRequestedAt = new Date().toISOString();
+      state.personalizedReportNotificationSent = Boolean(response.notification_sent);
+      window.FinasureStorage.save(state);
+      location.href = "demande-rapport-confirmee.html";
+    } catch (error) {
+      errorBox.textContent = error.message;
+      errorBox.hidden = false;
+      requestInProgress = false;
+      requestButton.disabled = false;
+      label.textContent = originalLabel;
+      errorBox.scrollIntoView({ behavior: "smooth", block: "center" });
+    }
   });
   document.querySelector("#appointment-button").addEventListener("click", () => { location.href = APPOINTMENT_URL; });
 })();

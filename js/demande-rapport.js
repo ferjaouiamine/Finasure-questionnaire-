@@ -111,7 +111,7 @@
       box.hidden = false;
       if (submitButton) {
         submitButton.disabled = false;
-        submitButton.textContent = "Accéder à mon rapport complet →";
+        submitButton.textContent = "Accéder à mon rapport →";
       }
     }
   });
