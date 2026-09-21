@@ -88,6 +88,7 @@
       globalLevelElement.textContent = globalLevel.label;
     }
     document.querySelector("#global-interpretation").textContent = interpretation(results.globalScore);
+    document.querySelector("#score-card-summary").textContent = interpretation(results.globalScore);
     document.querySelector("#global-next-step").textContent = globalLevel.nextStep;
     document.querySelector("#score-progress-bar").style.width = `${results.percentage}%`;
     renderMaturityScale(globalLevel);
