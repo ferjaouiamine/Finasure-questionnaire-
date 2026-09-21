@@ -2,51 +2,45 @@
   "use strict";
   let instance = null;
 
-  function scoreColor(score) {
-    if (score < 1.5) return "#d92d20";
-    if (score < 2.5) return "#f97066";
-    if (score < 3.5) return "#fdb022";
-    if (score < 4.5) return "#32b98c";
-    return "#067647";
-  }
-
   function renderRadar(canvas, dimensions) {
-    if (instance) instance.destroy();
+    if (instance) {
+      instance.destroy();
+      instance = null;
+    }
     if (typeof Chart === "undefined") return false;
 
-    const ordered = [...dimensions].sort((a, b) => b.score - a.score);
     instance = new Chart(canvas, {
-      type: "bar",
+      type: "radar",
       data: {
-        labels: ordered.map((dimension) => dimension.name),
+        labels: dimensions.map((dimension) => dimension.name),
         datasets: [{
-          label: "Score sur 5",
-          data: ordered.map((dimension) => dimension.score),
-          backgroundColor: ordered.map((dimension) => scoreColor(dimension.score)),
-          borderRadius: 7,
-          borderSkipped: false,
-          barThickness: 18
+          label: "Niveau de maturité",
+          data: dimensions.map((dimension) => dimension.score),
+          backgroundColor: "rgba(0, 169, 212, .22)",
+          borderColor: "#087f9e",
+          borderWidth: 2.5,
+          pointBackgroundColor: "#ffffff",
+          pointBorderColor: "#087f9e",
+          pointBorderWidth: 2,
+          pointRadius: 4,
+          pointHoverRadius: 6,
+          pointHoverBackgroundColor: "#071b33"
         }]
       },
       options: {
-        indexAxis: "y",
         responsive: true,
         maintainAspectRatio: false,
         animation: { duration: 650, easing: "easeOutQuart" },
-        layout: { padding: { right: 12 } },
+        layout: { padding: 12 },
         scales: {
-          x: {
+          r: {
             min: 0,
             max: 5,
-            ticks: { stepSize: 1, color: "#718096", callback: (value) => `${value}` },
-            title: { display: true, text: "Score de maturité / 5", color: "#52677c", font: { weight: "600" } },
-            grid: { color: "rgba(7, 27, 51, .08)" },
-            border: { display: false }
-          },
-          y: {
-            grid: { display: false },
-            border: { display: false },
-            ticks: { color: "#14263b", autoSkip: false, font: { family: "DM Sans", size: 11, weight: "600" } }
+            beginAtZero: true,
+            angleLines: { color: "rgba(7, 27, 51, .12)" },
+            grid: { color: "rgba(7, 27, 51, .10)", circular: false },
+            ticks: { stepSize: 1, showLabelBackdrop: false, color: "#718096", font: { size: 9 } },
+            pointLabels: { color: "#14263b", padding: 12, font: { family: "DM Sans", size: 11, weight: "600" } }
           }
         },
         plugins: {
