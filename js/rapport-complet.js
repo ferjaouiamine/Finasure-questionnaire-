@@ -77,7 +77,16 @@
     globalResult?.style.setProperty("--level-bg", globalLevel.backgroundColor);
     globalResult?.style.setProperty("--level-border", globalLevel.borderColor);
     document.querySelector("#global-score").textContent = results.displayGlobalScore.replace(".", ",");
-    document.querySelector("#global-level").textContent = globalLevel.label;
+    const globalLevelElement = document.querySelector("#global-level");
+    if (globalLevel.key === "aspirational") {
+      const scaleLink = element("a", "maturity-scale-link");
+      scaleLink.href = "#maturity-scale-title";
+      scaleLink.setAttribute("aria-label", "Aspirationnel — voir l’échelle de maturité");
+      scaleLink.append("Aspirationnel ", element("sup", null, "*"));
+      globalLevelElement.replaceChildren(scaleLink);
+    } else {
+      globalLevelElement.textContent = globalLevel.label;
+    }
     document.querySelector("#global-interpretation").textContent = interpretation(results.globalScore);
     document.querySelector("#global-next-step").textContent = globalLevel.nextStep;
     renderMaturityScale(globalLevel);
