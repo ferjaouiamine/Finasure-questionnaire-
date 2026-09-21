@@ -80,6 +80,7 @@
     document.querySelector("#global-level").textContent = globalLevel.label;
     document.querySelector("#global-interpretation").textContent = interpretation(results.globalScore);
     document.querySelector("#global-next-step").textContent = globalLevel.nextStep;
+    renderMaturityScale(globalLevel);
     results.strengths.forEach((dimension) => document.querySelector("#strengths").append(rankCard(dimension, false)));
     results.priorities.forEach((dimension) => document.querySelector("#priorities").append(rankCard(dimension, true)));
     results.dimensions.forEach(renderDimension);
@@ -89,6 +90,17 @@
 
   function interpretation(score) {
     return maturity.getMaturityLevel(score).interpretation;
+  }
+
+  function renderMaturityScale(level) {
+    const score = Number(results.globalScore);
+    const position = Math.min(100, Math.max(0, ((score - 1) / 4) * 100));
+    const marker = document.querySelector("#maturity-scale-marker");
+    marker.style.left = `${position}%`;
+    marker.style.setProperty("--marker-color", level.textColor);
+    document.querySelector("#maturity-scale-score").textContent = `${score.toFixed(2).replace(".", ",")} / 5`;
+    document.querySelector(`[data-level="${level.key}"]`)?.classList.add("is-current");
+    document.querySelector("#maturity-scale-summary").textContent = `Votre score de ${score.toFixed(2).replace(".", ",")} sur 5 vous situe au niveau ${level.label}.`;
   }
 
   function rankCard(dimension, priority) {
