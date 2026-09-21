@@ -5,7 +5,7 @@
   <title>Rapport complet ERM | Finasure</title>
   <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/style.css?v=20260921-13"><link rel="stylesheet" href="css/print.css" media="print">
+  <link rel="stylesheet" href="css/style.css?v=20260921-14"><link rel="stylesheet" href="css/print.css" media="print">
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
 </head>
 <body class="report-view">
@@ -20,18 +20,18 @@
       <aside><small>Des organisations plus résilientes pour un avenir durable.</small><i></i><b>Évaluer<br>Renforcer<br>Protéger<br>Construire l’avenir</b></aside>
     </section>
     <section class="report-facts report-section" aria-label="Informations du rapport">
-      <div><span class="fact-icon" aria-hidden="true">▣</span><small>Date de l’évaluation</small><strong><time id="report-date"></time></strong></div>
-      <div><span class="fact-icon" aria-hidden="true">▥</span><small>Organisation</small><strong id="report-company"></strong></div>
-      <div><span class="fact-icon" aria-hidden="true">◉</span><small>Répondant</small><strong id="report-name"></strong></div>
+      <div><span class="fact-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M7 2v4M17 2v4M3 9h18M5 4h14a2 2 0 0 1 2 2v14H3V6a2 2 0 0 1 2-2Zm2 9h2v2H9Zm4 0h2v2h-2Zm4 0h2v2h-2ZM5 15h2v2H5Zm4 0h2v2H9Zm4 0h2v2h-2Z"/></svg></span><small>Date de l’évaluation</small><strong><time id="report-date"></time></strong></div>
+      <div><span class="fact-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 21V7l8-4 8 4v14M8 9h2m4 0h2m-8 4h2m4 0h2m-8 4h2m4 0h2M2 21h20"/></svg></span><small>Organisation</small><strong id="report-company"></strong></div>
+      <div><span class="fact-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8Zm13 10v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg></span><small>Répondant</small><strong id="report-name"></strong></div>
     </section>
     <section class="report-score-layout report-section">
       <div class="global-result"><div class="score-ring"><small>Score global</small><div class="score-value"><strong id="global-score"></strong><span>/ 5</span></div><div class="score-progress" aria-hidden="true"><i id="score-progress-bar"></i></div></div><div class="report-level"><small>Votre niveau</small><h2 id="global-level"></h2></div><p id="score-card-summary"></p></div>
       <section class="maturity-scale-section" aria-labelledby="maturity-scale-title"><div class="section-heading"><h2 id="maturity-scale-title">Votre position sur l’échelle ERM</h2></div><div class="maturity-scale" role="img" aria-describedby="maturity-scale-summary"><div class="maturity-scale-plot"><div class="maturity-scale-marker" id="maturity-scale-marker"><strong id="maturity-scale-score"></strong><span aria-hidden="true"></span></div><div class="maturity-scale-track" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></div></div><div class="maturity-scale-labels"><div data-level="emergent"><strong>Émergent</strong><span>1 à 1,49</span></div><div data-level="progressing"><strong>En progression</strong><span>1,50 à 2,49</span></div><div data-level="established"><strong>Établi</strong><span>2,50 à 3,49</span></div><div data-level="advanced"><strong>Avancé</strong><span>3,50 à 4,49</span></div><div data-level="aspirational"><strong>Aspirationnel</strong><span>4,50 à 5</span></div></div></div><p id="maturity-scale-summary" class="maturity-scale-summary" aria-live="polite"></p></section>
     </section>
-    <section class="report-narrative-grid report-section"><article><h2>Vos résultats</h2><p id="global-interpretation"></p></article><article class="next-step-panel"><h2>Prochaine étape</h2><p id="global-next-step"></p></article></section>
+    <section class="report-narrative-grid report-section"><article><h2><span class="section-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M6 2h9l5 5v15H6zM14 2v6h6M9 13h8M9 17h8"/></svg></span>Vos résultats</h2><p id="global-interpretation"></p></article><article class="next-step-panel"><h2><span class="section-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="4"/><path d="m15 9 6-6M17 3h4v4"/></svg></span>Prochaine étape</h2><p id="global-next-step"></p></article></section>
     <section class="report-analysis-grid report-section">
       <section class="report-radar-section"><div class="section-heading"><h2>Votre profil de maturité par dimension</h2></div><div class="chart-wrap report-radar-wrap"><canvas id="radar-chart" aria-label="Graphique radar des onze dimensions"></canvas><p id="chart-fallback" class="notice" hidden>Le graphique n’a pas pu être chargé.</p></div></section>
-      <section class="report-strengths-block"><div class="strengths-columns"><div><h3>Vos 3 principaux points forts</h3><div id="strengths" class="ranking-list"></div></div><div><h3>Vos 3 points à renforcer</h3><div id="priorities" class="ranking-list priorities"></div></div></div></section>
+      <section class="report-strengths-block"><div class="strengths-columns"><div><h3><span class="list-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M8 4h8v5a4 4 0 0 1-8 0ZM8 6H4v2a4 4 0 0 0 4 4m8-6h4v2a4 4 0 0 1-4 4m-4 1v5m-4 3h8"/></svg></span>Vos 3 principaux points forts</h3><div id="strengths" class="ranking-list"></div></div><div><h3><span class="list-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 20V10m5 10V5m5 15v-8m5 8V3M3 20h18"/></svg></span>Vos 3 points à renforcer</h3><div id="priorities" class="ranking-list priorities"></div></div></div></section>
     </section>
     <section class="result-section client-hidden-section" hidden><div id="dimension-list" class="dimension-list"></div></section><section class="result-section client-hidden-section" hidden><div id="maturity-grid" class="maturity-grid"></div></section><section class="result-section client-hidden-section" hidden><div id="recommendations" class="accordions"></div></section>
     <aside class="methodology report-section"><strong>Avertissement méthodologique</strong><p>Ce diagnostic est un outil indicatif d’aide à la réflexion. Il ne constitue ni un audit, ni une certification, ni un avis réglementaire.</p></aside>
