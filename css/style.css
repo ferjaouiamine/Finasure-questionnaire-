@@ -278,7 +278,7 @@
 .complement-consent input[aria-invalid="true"]{outline:2px solid rgba(201,54,43,.3);outline-offset:2px}
 @media(max-width:768px){.complement-content{padding:30px 0 48px}.complement-content>p{margin-bottom:26px}.complement-field label{font-size:16px}.complement-actions{gap:14px}.complement-actions .button{flex:1;text-align:center;padding-left:12px;padding-right:12px}}
 
-.maturity-scale-section{margin-top:60px;padding:30px;border:1px solid var(--line);border-radius:16px;background:#fff;box-shadow:var(--shadow)}
+.maturity-scale-section{margin:24px 0 0;padding:30px;border:1px solid var(--line);border-radius:16px;background:#fff;box-shadow:var(--shadow)}
 .maturity-scale-section .section-heading{margin-bottom:34px}
 .maturity-scale{padding:0 8px}
 .maturity-scale-plot{position:relative;margin:0 32px;padding-top:45px}
