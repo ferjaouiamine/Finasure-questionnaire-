@@ -8,6 +8,7 @@
 
   const empty = () => ({
     version: VERSION,
+    questionnaireVersion: "",
     currentStep: 1,
     answers: {},
     comments: {},
@@ -65,6 +66,7 @@
       ...base,
       ...old,
       version: VERSION,
+      questionnaireVersion: String(old.questionnaireVersion || ""),
       currentStep: Math.min(4, Math.max(1, Number(old.currentStep) || 1)),
       answers: { ...object(old.answers) },
       comments: { ...object(old.comments) },

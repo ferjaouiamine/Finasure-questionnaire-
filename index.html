@@ -8,7 +8,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/style.css?v=20260914-1">
+  <link rel="stylesheet" href="css/style.css?v=20260918-12">
 </head>
 <body>
   <a class="skip-link" href="#main">Aller au contenu</a>
@@ -24,21 +24,33 @@
     <section class="view view-home">
       <div class="hero-grid home-hero">
         <div class="hero-copy">
-          <p class="eyebrow"><span></span> Diagnostic de maturité ERM</p>
           <h1>Évaluez la maturité du dispositif <em>ERM</em> de votre entreprise</h1>
+          <p class="hero-intro">Ce questionnaire évalue la maturité de votre dispositif de gestion des risques, Répondez sur la base de votre situation réelle et non de la situation souhaitée : une pratique documentée mais non appliquée relève du « Partiellement ».
+A l'issue, vous obtenez votre niveau de maturité et des recommandations concrètes à court et moyen terme</p>
         </div>
+        <img class="home-hero-image" src="assets/questionnaire-erm-intro.png" alt="Équipe de direction analysant les risques et les priorités stratégiques de l’entreprise">
       </div>
       <div class="benefits home-benefits" aria-label="Les bénéfices de l’évaluation">
         <article><span class="benefit-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M8 6h11M8 12h11M8 18h11M3.5 6h.01M3.5 12h.01M3.5 18h.01"/></svg></span><div><b>Évaluation guidée</b><small>Un parcours clair qui vous accompagne simplement jusqu’à vos résultats.</small></div></article>
         <article><span class="benefit-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 19V9M10 19V5M16 19v-7M22 19V3M2 19h21"/></svg></span><div><b>Analyse immédiate</b><small>Visualisez instantanément votre score global et votre profil de maturité.</small></div></article>
         <article><span class="benefit-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M6 2h9l4 4v16H6zM14 2v5h5M9 12h7M9 16h7"/></svg></span><div><b>Rapport personnalisé</b><small>Obtenez une lecture adaptée à votre entreprise pour orienter vos priorités.</small></div></article>
       </div>
-      <div class="home-final-cta">
-        <a class="button button-large" href="questionnaire.html">Commencer l’évaluation →</a>
-      </div>
+      <section class="home-start" aria-labelledby="home-start-title">
+        <div class="home-start-heading">
+          <h2 id="home-start-title">Commencez votre évaluation</h2>
+          <p>Renseignez vos coordonnées pour commencer le questionnaire.</p>
+        </div>
+        <form id="home-start-form" class="home-start-form" novalidate>
+          <div class="field"><label for="home-first-name">Prénom *</label><input id="home-first-name" name="firstName" autocomplete="given-name" minlength="2" placeholder="Prénom" required><small class="field-error" data-error-for="firstName" aria-live="polite"></small></div>
+          <div class="field"><label for="home-last-name">Nom *</label><input id="home-last-name" name="lastName" autocomplete="family-name" minlength="2" placeholder="Nom" required><small class="field-error" data-error-for="lastName" aria-live="polite"></small></div>
+          <div class="field"><label for="home-email">E-mail professionnel *</label><input id="home-email" name="email" type="email" autocomplete="email" placeholder="E-mail professionnel" required><small class="field-error" data-error-for="email" aria-live="polite"></small></div>
+          <button class="button button-large" type="submit">Suivant →</button>
+        </form>
+      </section>
     </section>
   </main>
   <footer><a class="brand footer-brand" href="index.html"><img src="assets/logo-finasure.png" alt="Finasure"></a><p>Prototype indépendant — Évaluation de maturité ERM</p><p>© 2026 Finasure.</p></footer>
-  <script>const menu=document.querySelector('.menu-button');const nav=document.querySelector('.main-nav');menu?.addEventListener('click',()=>{const open=nav.classList.toggle('is-open');menu.setAttribute('aria-expanded',String(open));});</script>
+  <script src="js/storage.js?v=20260810-1"></script>
+  <script src="js/index.js?v=20260918-1"></script>
 </body>
 </html>

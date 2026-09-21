@@ -6,7 +6,7 @@
   const state = FinasureStorage.load();
   const complete = data?.questions?.every((question) => Number(state.answers[question.id]) >= 1 && Number(state.answers[question.id]) <= 5);
   const client = state.client || {};
-  const clientValid = state.leadFormCompleted && client.consent && client.company && client.sector && client.workforce && client.firstName && client.lastName && client.jobTitle && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(client.email || "");
+  const clientValid = state.leadFormCompleted && client.company && client.sector && client.workforce && client.firstName && client.lastName && client.jobTitle && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(client.email || "");
 
   if (!complete || !state.questionnaireCompleted) {
     location.href = "questionnaire.html";
@@ -17,7 +17,7 @@
     return;
   }
   if (!clientValid) {
-    location.href = "demande-rapport.html";
+    location.href = "resultats.html";
     return;
   }
   const locallyVerified =
@@ -57,9 +57,9 @@
 
   function renderClient() {
     const values = {
-      "report-company": client.company,
+      "report-company": client.company || "Entreprise non renseignée",
       "report-name": `${client.firstName} ${client.lastName}`,
-      "report-client-company": client.company,
+      "report-client-company": client.company || "Non renseignée",
       "report-sector": client.sector,
       "report-workforce": client.workforce,
       "report-job": client.jobTitle,
@@ -84,7 +84,6 @@
     results.priorities.forEach((dimension) => document.querySelector("#priorities").append(rankCard(dimension, true)));
     results.dimensions.forEach(renderDimension);
     renderMaturityGrid();
-    renderComments();
     if (!FinasureChart.renderRadar(document.querySelector("#radar-chart"), results.dimensions)) document.querySelector("#chart-fallback").hidden = false;
   }
 
@@ -166,18 +165,6 @@
     const field = element("div", "maturity-grid-field");
     field.append(element("strong", null, label), element("p", null, value));
     return field;
-  }
-
-  function renderComments() {
-    const comments = Object.entries(state.comments).filter(([, value]) => String(value).trim());
-    if (!comments.length) return;
-    const container = document.querySelector("#comments-list");
-    comments.forEach(([key, value]) => {
-      const match = /^step-(\d+)$/.exec(key), article = element("article", "comment-result");
-      const title = match ? `Étape ${match[1]} · ${data.stepNames?.[Number(match[1]) - 1] || "Commentaire"}` : `Commentaire ${key}`;
-      article.append(element("h3", null, title), element("p", null, String(value))); container.append(article);
-    });
-    document.querySelector("#comments-section").hidden = false;
   }
 
   let requestInProgress = false;

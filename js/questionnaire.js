@@ -14,12 +14,27 @@
   let isTransitioning = false;
   let transitionTimer = null;
 
-  if (!data?.questions || totalQuestions !== 33 || data.steps.length !== 4) {
+  if (!data?.questions || totalQuestions !== 22 || data.steps.length !== 4) {
     showError("Les données du questionnaire sont absentes ou incomplètes.");
     return;
   }
 
-  let step = Math.min(3, Math.max(0, state.currentStep - 1));
+  if (state.questionnaireVersion !== data.version) {
+    state.questionnaireVersion = data.version;
+    state.currentStep = 1;
+    state.answers = {};
+    state.comments = {};
+    state.results = FinasureStorage.empty().results;
+    state.questionnaireCompleted = false;
+    state.completedAt = "";
+    state.syncKey = "";
+    state.syncStatus = "local";
+    state.remoteAssessmentId = "";
+    state.remoteAccessToken = "";
+    FinasureStorage.save(state);
+  }
+
+  let step = Math.min(data.steps.length - 1, Math.max(0, state.currentStep - 1));
   const notice = sessionStorage.getItem("finasureNotice");
   if (notice) {
     sessionStorage.removeItem("finasureNotice");
@@ -68,6 +83,7 @@
       const wrapper = createElement("div", "answer-option");
       const input = createElement("input");
       const label = createElement("label");
+      const answerName = createElement("strong", "answer-name", answer.name);
       const description = createElement(
         "span",
         "answer-description",
@@ -80,40 +96,13 @@
       input.value = String(answer.score);
       input.checked = Number(state.answers[question.id]) === answer.score;
       label.htmlFor = input.id;
-      label.append(description);
+      label.append(answerName, description);
       wrapper.append(input, label);
       group.append(wrapper);
     });
 
     card.append(meta, title, group);
     return card;
-  }
-
-  function createStepComment() {
-    const commentKey = `step-${step + 1}`;
-    const section = createElement("section", "step-comment");
-    const label = createElement(
-      "label",
-      "step-comment-label",
-      "Commentaire ou élément de preuve pour cette étape"
-    );
-    const textarea = createElement("textarea", "comment-area step-comment-area");
-
-    textarea.id = `comment-step-${step + 1}`;
-    textarea.name = commentKey;
-    textarea.rows = 5;
-    textarea.placeholder =
-      "Ajoutez ici un commentaire, une précision ou un élément de preuve concernant cette étape…";
-    textarea.value = String(state.comments[commentKey] || "");
-    label.htmlFor = textarea.id;
-
-    textarea.addEventListener("input", () => {
-      state.comments[commentKey] = textarea.value;
-      persist();
-    });
-
-    section.append(label, textarea);
-    return section;
   }
 
   function render() {
@@ -156,18 +145,15 @@
 
     const fragment = document.createDocumentFragment();
     questions.forEach((question) => fragment.append(createQuestionCard(question)));
-    fragment.append(createStepComment());
     list.replaceChildren(fragment);
 
-    previous.hidden = step === 0;
-    const stepComplete = questions.every((question) => {
-      const answer = Number(state.answers[question.id]);
-      return answer >= 1 && answer <= 5;
-    });
+    previous.hidden = false;
+    previous.disabled = step === 0;
+    previous.setAttribute("aria-disabled", String(step === 0));
     const isFinalStep = step === data.steps.length - 1;
-    next.hidden = !isFinalStep && !stepComplete;
-    next.textContent = isFinalStep ? "Vos résultats →" : "Continuer →";
-    actions.hidden = previous.hidden && next.hidden;
+    next.hidden = false;
+    next.textContent = isFinalStep ? "Vos résultats →" : "Suivant →";
+    actions.hidden = false;
     state.currentStep = step + 1;
     persist();
     updateProgress();
@@ -300,7 +286,7 @@
       return;
     }
 
-    if (step < 3) {
+    if (step < data.steps.length - 1) {
       step += 1;
       render();
       window.scrollTo({ top: 0, behavior: "smooth" });

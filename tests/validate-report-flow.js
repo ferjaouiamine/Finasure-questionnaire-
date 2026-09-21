@@ -62,7 +62,7 @@ for (const file of ["questionnaire-data.js", "storage.js", "calcul.js", "assessm
     reportRequested: true
   });
   if (!result.synced) throw new Error("Synchronisation de test échouée.");
-  if (assessmentPayload.answers.length !== 33) throw new Error("Réponses incomplètes.");
+  if (assessmentPayload.answers.length !== 22) throw new Error("Réponses incomplètes.");
   if (assessmentPayload.dimensions.length !== 11) throw new Error("Dimensions incomplètes.");
   if (recommendationPayload.length !== 11) throw new Error("Recommandations incomplètes.");
   if (recommendationPayload.filter((item) => item.is_strength).length !== 3) throw new Error("Forces incorrectes.");

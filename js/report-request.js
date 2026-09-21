@@ -14,15 +14,12 @@
       if (!synchronization?.synced) throw new Error(GENERIC_ERROR);
     }
 
-    const { data, error } = await api.client.functions.invoke(
-      "request-personalized-report",
-      {
-        body: {
-          assessment_id: state.remoteAssessmentId,
-          public_access_token: state.remoteAccessToken
-        }
-      }
-    );
+    // La notification interne est en pause : la demande est enregistrée par
+    // une fonction SQL sécurisée, sans dépendre du CORS d'une Edge Function.
+    const { data, error } = await api.client.rpc("request_personalized_report", {
+      p_assessment_id: state.remoteAssessmentId,
+      p_public_access_token: state.remoteAccessToken
+    });
 
     if (error || !data?.recorded) {
       console.error("Demande de rapport personnalisé refusée", error || data);

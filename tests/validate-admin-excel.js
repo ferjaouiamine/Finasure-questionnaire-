@@ -36,8 +36,8 @@ function assessment(company, date, answerOffset = 0) {
     assessment_answers: context.FINASURE_ERM_DATA.questions.map((question, index) => ({
       question_id: question.id,
       question_text: question.text,
-      answer_text: question.answers[(index + answerOffset) % 5].description,
-      score: question.answers[(index + answerOffset) % 5].score,
+      answer_text: question.answers[(index + answerOffset) % question.answers.length].description,
+      score: question.answers[(index + answerOffset) % question.answers.length].score,
       comment: index === 0 ? "Preuve disponible" : null
     })),
     dimension_scores: context.FINASURE_ERM_DATA.dimensions.map((dimension, index) => ({
@@ -52,7 +52,7 @@ function assessment(company, date, answerOffset = 0) {
   const first = assessment("Finasure Conseil", "2026-08-07T10:00:00Z");
   const sheets = context.AdminExcel.buildSheets(first);
   assert.deepEqual(Object.keys(sheets), ["Synthese", "Reponses", "Scores"]);
-  assert.equal(sheets.Reponses.length, 34);
+  assert.equal(sheets.Reponses.length, 23);
   assert.equal(sheets.Scores.length, 12);
   assert.equal(sheets.Reponses[1][2], first.assessment_answers[0].question_text);
   assert.equal(sheets.Reponses[1][3], first.assessment_answers[0].answer_text);

@@ -20,8 +20,9 @@
     location.href = "questionnaire.html";
     return;
   }
-  if (!state.leadFormCompleted || !state.client?.consent) {
-    location.href = "demande-rapport.html";
+  const clientComplete = state.leadFormCompleted && state.client?.company && state.client?.sector && state.client?.workforce && state.client?.jobTitle && state.client?.firstName && state.client?.lastName && state.client?.email;
+  if (!clientComplete) {
+    location.href = "resultats.html";
     return;
   }
 

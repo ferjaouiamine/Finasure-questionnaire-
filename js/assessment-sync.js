@@ -69,7 +69,7 @@
           question.answers?.[
             Number(state.answers?.[question.id ?? index + 1]) - 1
           ]?.description || "",
-        comment: state.comments?.[`step-${Math.floor(index / 9) + 1}`] || ""
+        comment: ""
       })),
       dimensions: dimensions.map((item) => ({
         dimension_id: item.id,

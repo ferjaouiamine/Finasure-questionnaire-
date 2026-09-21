@@ -4,11 +4,11 @@ const path = require("node:path");
 const maturity = require("../supabase/functions/_shared/maturity.js");
 
 const expected = [
-  [1, "Émergent"], [1.8, "Émergent"],
-  [1.99, "En progression"], [2, "En progression"], [2.6, "En progression"],
-  [2.99, "Établi"], [3, "Établi"], [3.4, "Établi"],
-  [3.99, "Avancé"], [4, "Avancé"], [4.2, "Avancé"],
-  [4.99, "Aspirationnel"], [5, "Aspirationnel"]
+  [1, "Émergent"], [1.49, "Émergent"],
+  [1.5, "En progression"], [2, "En progression"], [2.49, "En progression"],
+  [2.5, "Établi"], [3, "Établi"], [3.49, "Établi"],
+  [3.5, "Avancé"], [4, "Avancé"], [4.49, "Avancé"],
+  [4.5, "Aspirationnel"], [5, "Aspirationnel"]
 ];
 
 for (const [score, label] of expected) {

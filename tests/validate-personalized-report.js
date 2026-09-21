@@ -13,15 +13,16 @@ const requestJs = read("js/report-request.js");
 const confirmation = read("demande-rapport-confirmee.html");
 const edge = read("supabase/functions/request-personalized-report/index.ts");
 const migration = read("supabase/migrations/202608100001_personalized_report_requests.sql");
+const recordingMigration = read("supabase/migrations/202609170002_record_personalized_report_request.sql");
 
-assert(questionnaire.includes("Démarrer votre diagnostic ERM"));
+assert(questionnaire.includes("Évaluez la maturité du dispositif"));
 assert(questionnaireJs.includes('"Vos résultats →"'));
 assert(lead.includes("Accéder à mon rapport →"));
 assert(report.includes("Recevoir le rapport complet gratuit en PDF"));
 assert.strictEqual((report.match(/client-hidden-section/g) || []).length, 3);
 assert(!reportJs.includes("window.print("));
 assert(reportJs.includes("requestInProgress"));
-assert(requestJs.includes('functions.invoke(\n      "request-personalized-report"'));
+assert(requestJs.includes('rpc("request_personalized_report"'));
 assert(requestJs.includes("public_access_token"));
 assert(!requestJs.includes("RESEND_API_KEY"));
 assert(confirmation.includes("délai maximum de 48 heures"));
@@ -34,5 +35,8 @@ assert(edge.includes('notification_pending: true'));
 assert(edge.includes('recorded: true'));
 assert(migration.includes("personalized_status"));
 assert(migration.includes("personalized_report_requested"));
+assert(recordingMigration.includes("p_public_access_token"));
+assert(recordingMigration.includes("assessment_access_denied"));
+assert(recordingMigration.includes("grant execute on function public.request_personalized_report"));
 
 console.log("Validation réussie : demande personnalisée, anti-doublon, notification et confirmation.");

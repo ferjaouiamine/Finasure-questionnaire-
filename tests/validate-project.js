@@ -20,22 +20,22 @@ vm.runInContext(
 );
 
 const data = context.window.FINASURE_ERM_DATA;
-if (data.questions.length !== 33) throw new Error("Le questionnaire ne contient pas 33 questions.");
+if (data.questions.length !== 22) throw new Error("Le questionnaire V2 ne contient pas 22 questions.");
 if (data.dimensions.length !== 11) throw new Error("Le questionnaire ne contient pas 11 dimensions.");
 for (const question of data.questions) {
-  if (question.answers.length !== 5) throw new Error(`Question ${question.id}: nombre de réponses invalide.`);
-  if (new Set(question.answers.map((answer) => answer.description)).size !== 5) {
+  if (question.answers.length !== 3) throw new Error(`Question ${question.id}: nombre de réponses invalide.`);
+  if (new Set(question.answers.map((answer) => answer.description)).size !== 3) {
     throw new Error(`Question ${question.id}: réponses dupliquées.`);
   }
-  if (question.answers.map((answer) => answer.score).join(",") !== "1,2,3,4,5") {
+  if (question.answers.map((answer) => answer.score).join(",") !== "1,2,3") {
     throw new Error(`Question ${question.id}: scores invalides.`);
   }
 }
 
-for (const value of [1, 3, 5]) {
+for (const [value, expectedScore] of [[1, 1], [2, 3], [3, 5]]) {
   const answers = Object.fromEntries(data.questions.map((question) => [question.id, value]));
   const result = context.window.FinasureCalcul.calculate(data, answers);
-  if (Math.abs(result.globalScore - value) > 0.0001) throw new Error("Régression du calcul global.");
+  if (Math.abs(result.globalScore - expectedScore) > 0.0001) throw new Error("Régression du calcul global.");
   if (result.dimensions.length !== 11) throw new Error("Régression des dimensions.");
 }
 
@@ -65,6 +65,15 @@ const reportMigration = fs.readFileSync(
   path.join(root, "supabase/migrations/202607230003_automatic_pdf_reports.sql"),
   "utf8"
 );
+const questionnaireV2Migration = fs.readFileSync(
+  path.join(root, "supabase/migrations/202609170001_questionnaire_v2.sql"),
+  "utf8"
+);
+for (const required of ["<> 22", "between 1 and 22", "between 1 and 3"]) {
+  if (!questionnaireV2Migration.includes(required)) {
+    throw new Error(`Validation serveur V2 absente: ${required}`);
+  }
+}
 for (const table of [
   "companies", "respondents", "assessments", "assessment_answers",
   "dimension_scores", "reports", "appointments", "activity_logs"

@@ -22,7 +22,7 @@
   }
 
   if (!state.questionnaireCompleted || !state.leadFormCompleted || !state.client?.email) {
-    location.replace("demande-rapport.html");
+    location.replace("resultats.html");
     return;
   }
   function maskEmail(email) {

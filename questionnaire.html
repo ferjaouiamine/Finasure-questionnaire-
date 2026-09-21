@@ -7,7 +7,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/style.css?v=20260730-3">
+  <link rel="stylesheet" href="css/style.css?v=20260918-14">
 </head>
 <body>
   <a class="skip-link" href="#main">Aller au contenu</a>
@@ -20,16 +20,29 @@
   </header>
   <main id="main" class="questionnaire-view">
     <div id="app-error" class="notice error" role="alert" hidden></div>
-    <div class="questionnaire-intro">
-      <p class="eyebrow"><span></span> Démarrer votre diagnostic ERM</p>
+    <section class="questionnaire-intro questionnaire-hero" aria-labelledby="questionnaire-title">
+      <div class="questionnaire-hero-copy">
+        <h1 id="questionnaire-title">Évaluez la maturité du dispositif <em>ERM</em> de votre entreprise</h1>
+        <p class="hero-intro">Ce questionnaire évalue la maturité de votre dispositif de gestion des risques, Répondez sur la base de votre situation réelle et non de la situation souhaitée : une pratique documentée mais non appliquée relève du « Partiellement ».
+A l'issue, vous obtenez votre niveau de maturité et des recommandations concrètes à court et moyen terme</p>
+
+      </div>
+      <img src="assets/questionnaire-erm-intro.png" alt="Équipe de direction analysant les risques et les priorités stratégiques de l’entreprise">
       <p id="step-label" class="sr-only" aria-live="polite"></p>
-    </div>
-    <nav class="questionnaire-stepper" aria-label="Progression dans le questionnaire">
-      <ol id="step-indicator" class="erm-stepper"></ol>
-    </nav>
-    <div class="progress-panel">
-      <div class="progress-meta"><span id="progress-text">Progression</span><span id="progress-percent"></span></div>
-      <div class="progress-track" role="progressbar" aria-label="Progression des réponses" aria-valuemin="0" aria-valuemax="33"><i id="progress-bar"></i></div>
+    </section>
+    <div class="questionnaire-sticky-tools">
+      <div class="questionnaire-benefits" aria-label="Les étapes de votre diagnostic">
+        <article><span class="benefit-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M8 6h11M8 12h11M8 18h11M3.5 6h.01M3.5 12h.01M3.5 18h.01"/></svg></span><div><strong>Évaluation guidée</strong><span>Un parcours clair qui vous accompagne simplement jusqu’à vos résultats.</span></div></article>
+        <article><span class="benefit-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 19V9M10 19V5M16 19v-7M22 19V3M2 19h21"/></svg></span><div><strong>Analyse immédiate</strong><span>Visualisez instantanément votre score global et votre profil de maturité.</span></div></article>
+        <article><span class="benefit-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M6 2h9l4 4v16H6zM14 2v5h5M9 12h7M9 16h7"/></svg></span><div><strong>Rapport personnalisé</strong><span>Obtenez une lecture adaptée à votre entreprise pour orienter vos priorités.</span></div></article>
+      </div>
+      <nav class="questionnaire-stepper" aria-label="Progression dans le questionnaire" hidden>
+        <ol id="step-indicator" class="erm-stepper"></ol>
+      </nav>
+      <div class="progress-panel">
+        <div class="progress-meta"><span id="progress-text">Progression</span><span id="progress-percent"></span></div>
+        <div class="progress-track" role="progressbar" aria-label="Progression des réponses" aria-valuemin="0" aria-valuemax="22"><i id="progress-bar"></i></div>
+      </div>
     </div>
     <form id="questions-form" novalidate>
       <div id="questions-list"></div>
@@ -45,10 +58,10 @@
     <p>Diagnostic de maturité ERM</p>
     <p>© 2026 Finasure.</p>
   </footer>
-  <script src="js/questionnaire-data.js"></script>
+  <script src="js/questionnaire-data.js?v=20260917-1"></script>
   <script src="js/storage.js?v=20260810-1"></script>
-  <script src="supabase/functions/_shared/maturity.js"></script>
-  <script src="js/calcul.js"></script>
-  <script src="js/questionnaire.js?v=20260810-1"></script>
+  <script src="supabase/functions/_shared/maturity.js?v=20260917-1"></script>
+  <script src="js/calcul.js?v=20260917-1"></script>
+  <script src="js/questionnaire.js?v=20260918-2"></script>
 </body>
 </html>
