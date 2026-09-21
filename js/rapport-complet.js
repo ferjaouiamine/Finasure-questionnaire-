@@ -90,16 +90,8 @@
     document.querySelector("#global-interpretation").textContent = interpretation(results.globalScore);
     document.querySelector("#global-next-step").textContent = globalLevel.nextStep;
     renderMaturityScale(globalLevel);
-    const comparisonList = document.querySelector("#comparison-list");
-    results.strengths.forEach((strength, index) => {
-      const row = element("article", "comparison-row");
-      row.append(
-        element("span", "comparison-number", String(index + 1)),
-        rankCard(strength, false),
-        rankCard(results.priorities[index], true)
-      );
-      comparisonList.append(row);
-    });
+    results.strengths.forEach((dimension) => document.querySelector("#strengths").append(rankCard(dimension, false)));
+    results.priorities.forEach((dimension) => document.querySelector("#priorities").append(rankCard(dimension, true)));
     results.dimensions.forEach(renderDimension);
     renderMaturityGrid();
     if (!FinasureChart.renderRadar(document.querySelector("#radar-chart"), results.dimensions)) document.querySelector("#chart-fallback").hidden = false;
