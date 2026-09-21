@@ -7,7 +7,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/style.css?v=20260921-5">
+  <link rel="stylesheet" href="css/style.css?v=20260921-6">
   <link rel="stylesheet" href="css/print.css" media="print">
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
 </head>
@@ -45,7 +45,7 @@
       <article><h2>Vos résultats</h2><p id="global-interpretation"></p></article>
       <article class="next-step-panel"><h2>Prochaine étape</h2><p id="global-next-step"></p></article>
     </section>
-    <section class="result-section split-results report-strengths-block"><div><h2>Vos 3 principaux points forts</h2><div id="strengths" class="ranking-list"></div></div><div><h2>Vos 3 points à renforcer</h2><div id="priorities" class="ranking-list priorities"></div></div></section>
+    <section class="result-section report-strengths-block report-comparison-block"><h2>Points forts et points à renforcer</h2><div class="comparison-headings" aria-hidden="true"><span></span><strong>Points forts</strong><strong>Points à renforcer</strong></div><div id="comparison-list" class="comparison-list"></div></section>
     <section class="result-section report-radar-section"><div class="section-heading"><h2>Votre profil de maturité par dimension</h2><p>Cette représentation met en évidence l’équilibre de votre dispositif et les écarts entre dimensions.</p></div><div class="chart-wrap report-radar-wrap"><canvas id="radar-chart" aria-label="Graphique radar des onze dimensions"></canvas><p id="chart-fallback" class="notice" hidden>Le graphique n’a pas pu être chargé.</p></div></section>
     <section class="result-section client-hidden-section" hidden><div class="section-heading"><p class="eyebrow"><span></span> Analyse détaillée</p><h2>Scores des 11 dimensions</h2></div><div id="dimension-list" class="dimension-list"></div></section>
     <section class="result-section maturity-grid-section report-section client-hidden-section" hidden><div class="section-heading"><p class="eyebrow"><span></span> Référentiel de lecture</p><h2>Grille d’interprétation des niveaux de maturité</h2></div><div id="maturity-grid" class="maturity-grid"></div></section>
@@ -54,6 +54,6 @@
   </main>
   <section class="primary-actions fixed-action-bar no-print" aria-label="Actions du rapport"><div class="fixed-action-bar-inner"><button id="request-personalized-report-button" class="button report-action-button" type="button"><svg class="action-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9V3h12v6M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2M6 14h12v7H6z"/></svg><span>Recevoir le rapport complet gratuit en PDF</span></button><button id="appointment-button" class="button button-secondary report-action-button" type="button"><svg class="action-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 2v4M17 2v4M3 9h18M5 4h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2zM8 13h3v3H8z"/></svg><span>Prendre rendez-vous</span></button></div></section>
   <footer><a class="brand footer-brand" href="index.html"><img src="assets/logo-finasure.png" alt="Finasure"></a><p>Rapport complet ERM</p><p>© 2026 Finasure.</p></footer>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="js/questionnaire-data.js?v=20260917-1"></script><script src="js/storage.js?v=20260810-1"></script><script src="supabase/functions/_shared/maturity.js?v=20260921-2"></script><script src="js/calcul.js?v=20260917-1"></script><script src="js/chart.js?v=20260921-1"></script><script src="js/supabase-config.js?v=20260730-2"></script><script src="js/supabase-client.js?v=20260723-5"></script><script src="js/assessment-sync.js?v=20260918-1"></script><script src="js/otp-auth.js?v=20260723-5"></script><script src="js/report-request.js?v=20260917-2"></script><script src="js/rapport-complet.js?v=20260921-5"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="js/questionnaire-data.js?v=20260917-1"></script><script src="js/storage.js?v=20260810-1"></script><script src="supabase/functions/_shared/maturity.js?v=20260921-2"></script><script src="js/calcul.js?v=20260917-1"></script><script src="js/chart.js?v=20260921-1"></script><script src="js/supabase-config.js?v=20260730-2"></script><script src="js/supabase-client.js?v=20260723-5"></script><script src="js/assessment-sync.js?v=20260918-1"></script><script src="js/otp-auth.js?v=20260723-5"></script><script src="js/report-request.js?v=20260917-2"></script><script src="js/rapport-complet.js?v=20260921-6"></script>
 </body>
 </html>

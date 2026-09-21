@@ -320,13 +320,19 @@
 .report-strengths-block{gap:0;overflow:hidden;border:1px solid var(--line);border-radius:16px;background:#fff;box-shadow:var(--shadow)}
 .report-strengths-block>div{padding:30px}
 .report-strengths-block>div+div{border-left:1px solid var(--line)}
-.report-strengths-block .rank-card{box-shadow:none}
-.report-strengths-block .ranking-list{counter-reset:report-rank;gap:0}
-.report-strengths-block .rank-card{counter-increment:report-rank;position:relative;padding:16px 0 16px 42px;border:0;border-bottom:1px solid var(--line);border-radius:0;background:transparent}
-.report-strengths-block .rank-card:last-child{border-bottom:0}
-.report-strengths-block .rank-card::before{content:counter(report-rank);position:absolute;left:0;top:14px;display:grid;place-items:center;width:28px;height:28px;border-radius:50%;background:#e6f8fc;color:#087f9e;font:800 12px "Manrope",sans-serif}
-.report-strengths-block .priorities .rank-card::before{background:#fff3d6;color:#a15c00}
+.report-comparison-block{display:block;padding:30px}
+.report-comparison-block>h2{margin:0 0 24px}
+.comparison-headings,.comparison-row{display:grid;grid-template-columns:36px 1fr 1fr;gap:22px}
+.comparison-headings{padding:0 0 12px;border-bottom:1px solid var(--line);color:var(--navy)}
+.comparison-list{display:grid}
+.comparison-row{align-items:start;padding:18px 0;border-bottom:1px solid var(--line)}
+.comparison-row:last-child{border-bottom:0}
+.comparison-number{display:grid;place-items:center;width:28px;height:28px;border-radius:50%;background:var(--navy);color:#fff;font:800 12px "Manrope",sans-serif}
+.report-comparison-block .rank-card{padding:0 18px 0 0;border:0;border-radius:0;background:transparent;box-shadow:none}
+.report-comparison-block .rank-card.is-priority{padding:0 0 0 22px;border-left:1px solid var(--line)}
+.report-comparison-block .rank-card h3{font-size:15px}
 .full-report-page .print-client[hidden],.pdf-export-mode .print-client[hidden]{display:none!important}
+@media(max-width:700px){.report-comparison-block{padding:22px}.comparison-headings{display:none}.comparison-row{grid-template-columns:30px 1fr;gap:10px 14px}.comparison-number{grid-row:1/3}.report-comparison-block .rank-card{padding:0}.report-comparison-block .rank-card::before{display:block;margin-bottom:5px;color:#087f9e;font:700 10px "Manrope",sans-serif;text-transform:uppercase}.report-comparison-block .rank-card.is-strength::before{content:"Point fort"}.report-comparison-block .rank-card.is-priority{padding:14px 0 0;border-left:0;border-top:1px solid var(--line)}.report-comparison-block .rank-card.is-priority::before{content:"À renforcer"}}
 .report-radar-section{display:grid;grid-template-columns:minmax(230px,.35fr) minmax(0,.65fr);align-items:center;gap:34px;padding:32px;border:1px solid var(--line);border-radius:16px;background:linear-gradient(135deg,#f8fcfd,#eef8fb);box-shadow:var(--shadow)}
 .report-radar-section .section-heading{margin:0}
 .report-radar-section .section-heading p:last-child{color:var(--muted);line-height:1.6}
