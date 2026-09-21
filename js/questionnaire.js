@@ -197,6 +197,7 @@
   }
 
   function handleAnswerSelection(questionId) {
+    if (window.matchMedia("(min-width: 801px)").matches) return;
     if (isTransitioning) return;
 
     const [start, end] = data.steps[step];
