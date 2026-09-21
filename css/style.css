@@ -323,16 +323,16 @@
 .report-strengths-block{display:block;padding:30px}
 .report-strengths-block>h2{margin:0 0 26px}
 .strengths-columns{display:grid;grid-template-columns:1fr 1fr}
-.strengths-columns>div{padding-right:28px}
+.strengths-columns>div{display:grid;grid-template-rows:auto 1fr;min-width:0;padding-right:28px}
 .strengths-columns>div+div{padding:0 0 0 28px;border-left:1px solid var(--line)}
-.strengths-columns h3{margin:0 0 14px;color:var(--navy);font-size:18px}
-.report-strengths-block .ranking-list{counter-reset:report-rank;gap:0}
+.strengths-columns h3{min-height:26px;margin:0 0 14px;color:var(--navy);font-size:18px}
+.report-strengths-block .ranking-list{counter-reset:report-rank;display:grid;grid-template-rows:repeat(3,minmax(0,1fr));gap:0;height:100%}
 .report-strengths-block .rank-card{counter-increment:report-rank;position:relative;padding:15px 0 15px 40px;border:0;border-bottom:1px solid var(--line);border-radius:0;background:transparent;box-shadow:none}
 .report-strengths-block .rank-card:last-child{border-bottom:0}
 .report-strengths-block .rank-card::before{content:counter(report-rank);position:absolute;left:0;top:14px;display:grid;place-items:center;width:27px;height:27px;border-radius:50%;background:#e6f8fc;color:#087f9e;font:800 12px "Manrope",sans-serif}
 .report-strengths-block .priorities .rank-card::before{background:#fff3d6;color:#a15c00}
 .full-report-page .print-client[hidden],.pdf-export-mode .print-client[hidden]{display:none!important}
-@media(max-width:700px){.report-strengths-block{padding:22px}.strengths-columns{grid-template-columns:1fr}.strengths-columns>div{padding:0}.strengths-columns>div+div{margin-top:22px;padding:22px 0 0;border-top:1px solid var(--line);border-left:0}}
+@media(max-width:700px){.report-strengths-block{padding:22px}.strengths-columns{grid-template-columns:1fr}.strengths-columns>div{padding:0}.strengths-columns>div+div{margin-top:22px;padding:22px 0 0;border-top:1px solid var(--line);border-left:0}.report-strengths-block .ranking-list{grid-template-rows:none}.strengths-columns h3{min-height:0}}
 .report-radar-section{display:grid;grid-template-columns:minmax(230px,.35fr) minmax(0,.65fr);align-items:center;gap:34px;padding:32px;border:1px solid var(--line);border-radius:16px;background:linear-gradient(135deg,#f8fcfd,#eef8fb);box-shadow:var(--shadow)}
 .report-radar-section .section-heading{margin:0}
 .report-radar-section .section-heading p:last-child{color:var(--muted);line-height:1.6}
