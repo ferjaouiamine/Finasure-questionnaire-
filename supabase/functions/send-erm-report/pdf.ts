@@ -232,6 +232,7 @@ export async function generateReportPdf(data: ReportData, logoUrl?: string) {
   page.drawText(safe(globalLevel.label), { x: 264, y: y - 58, font: bold, size: 14, color: globalText });
   page.drawText(`${data.assessment.percentage} %`, { x: 260, y: y - 87, font: bold, size: 14, color: CYAN });
   y = drawWrapped(page, globalLevel.interpretation, 45, y - 175, 505, regular, 11);
+  y = drawWrapped(page, `Prochaine étape : ${globalLevel.nextStep}`, 45, y - 10, 505, bold, 10);
   y = title(page, "Radar des 11 dimensions", y - 35);
   drawRadar(page, data.dimensions, 298, y - 180, 125, regular);
 

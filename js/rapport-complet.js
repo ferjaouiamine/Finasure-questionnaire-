@@ -78,8 +78,8 @@
     globalResult?.style.setProperty("--level-border", globalLevel.borderColor);
     document.querySelector("#global-score").textContent = results.displayGlobalScore.replace(".", ",");
     document.querySelector("#global-level").textContent = globalLevel.label;
-    document.querySelector("#global-percentage").textContent = `${results.percentage} %`;
     document.querySelector("#global-interpretation").textContent = interpretation(results.globalScore);
+    document.querySelector("#global-next-step").textContent = globalLevel.nextStep;
     results.strengths.forEach((dimension) => document.querySelector("#strengths").append(rankCard(dimension, false)));
     results.priorities.forEach((dimension) => document.querySelector("#priorities").append(rankCard(dimension, true)));
     results.dimensions.forEach(renderDimension);
