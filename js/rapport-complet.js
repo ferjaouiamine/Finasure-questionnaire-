@@ -89,6 +89,7 @@
     }
     document.querySelector("#global-interpretation").textContent = interpretation(results.globalScore);
     document.querySelector("#global-next-step").textContent = globalLevel.nextStep;
+    document.querySelector("#score-progress-bar").style.width = `${results.percentage}%`;
     renderMaturityScale(globalLevel);
     results.strengths.forEach((dimension) => document.querySelector("#strengths").append(rankCard(dimension, false)));
     results.priorities.forEach((dimension) => document.querySelector("#priorities").append(rankCard(dimension, true)));
