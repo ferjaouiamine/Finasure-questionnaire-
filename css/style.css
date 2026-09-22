@@ -472,3 +472,12 @@
 .report-view .methodology{margin-top:7px;margin-bottom:0}
 @media(max-width:900px){.report-view .full-report-page{padding:8px}.report-facts{margin:0 0 6px}.report-score-layout,.report-narrative-grid,.report-analysis-grid{gap:6px;margin-top:6px}.report-analysis-grid .strengths-columns{gap:6px}}
 @media(max-width:480px){.report-view .full-report-page{padding:5px}.report-score-layout,.report-narrative-grid,.report-analysis-grid{gap:5px;margin-top:5px}.report-analysis-grid .strengths-columns{gap:5px}}
+/* Alignement final des zones entourées sur la maquette. */
+.report-facts{width:100%;margin:-1px 0 7px}
+.report-analysis-grid{align-items:stretch}
+.report-analysis-grid .report-radar-section{align-self:stretch}
+.report-analysis-grid .report-strengths-block{align-self:stretch;height:100%}
+.report-analysis-grid .report-strengths-block>.strengths-columns{grid-template-rows:repeat(2,minmax(0,1fr));height:100%;padding:0}
+.report-analysis-grid .strengths-columns>div,
+.report-analysis-grid .strengths-columns>div+div{height:100%}
+@media(max-width:900px){.report-analysis-grid{align-items:start}.report-analysis-grid .report-radar-section,.report-analysis-grid .report-strengths-block{align-self:start;height:auto}.report-analysis-grid .report-strengths-block>.strengths-columns{grid-template-rows:none;height:auto}}
