@@ -481,3 +481,6 @@
 .report-analysis-grid .strengths-columns>div,
 .report-analysis-grid .strengths-columns>div+div{height:100%}
 @media(max-width:900px){.report-analysis-grid{align-items:start}.report-analysis-grid .report-radar-section,.report-analysis-grid .report-strengths-block{align-self:start;height:auto}.report-analysis-grid .report-strengths-block>.strengths-columns{grid-template-rows:none;height:auto}}
+/* Couverture sans panneau bleu lateral. */
+.report-cover aside{display:none!important}
+.report-cover::after{background:linear-gradient(90deg,rgba(246,250,252,.98) 0%,rgba(246,250,252,.88) 31%,rgba(246,250,252,.08) 66%,rgba(7,38,68,.08) 100%)}
