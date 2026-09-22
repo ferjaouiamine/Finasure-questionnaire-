@@ -460,3 +460,15 @@
 .report-view .methodology{margin-top:14px}
 @media(max-width:900px){.report-score-layout{grid-template-columns:1fr}.report-score-layout>.global-result,.report-score-layout>.maturity-scale-section{min-height:0}.report-narrative-grid,.report-analysis-grid{gap:12px;margin-top:12px}}
 @media(max-width:700px){.report-score-layout,.report-narrative-grid,.report-analysis-grid{gap:10px;margin-top:10px}.report-analysis-grid .strengths-columns{gap:10px}}
+/* Surface utile maximale : arrière-plan réduit au strict minimum. */
+.report-view .full-report-page{padding:10px 12px 18px}
+.report-cover{border-radius:12px 12px 0 0}
+.report-facts{margin:-1px 2% 7px}
+.report-score-layout{gap:7px;margin-top:7px}
+.report-narrative-grid{gap:7px;margin-top:7px}
+.report-analysis-grid{gap:7px;margin-top:7px}
+.report-analysis-grid .strengths-columns{gap:7px}
+.report-view .fixed-action-bar{margin-top:7px}
+.report-view .methodology{margin-top:7px;margin-bottom:0}
+@media(max-width:900px){.report-view .full-report-page{padding:8px}.report-facts{margin:0 0 6px}.report-score-layout,.report-narrative-grid,.report-analysis-grid{gap:6px;margin-top:6px}.report-analysis-grid .strengths-columns{gap:6px}}
+@media(max-width:480px){.report-view .full-report-page{padding:5px}.report-score-layout,.report-narrative-grid,.report-analysis-grid{gap:5px;margin-top:5px}.report-analysis-grid .strengths-columns{gap:5px}}
