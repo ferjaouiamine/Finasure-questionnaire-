@@ -446,3 +446,17 @@
 .report-score-layout #global-level::before{content:"Niveau : ";font-weight:800}
 .report-score-layout #global-level .maturity-scale-link{display:inline;color:inherit}
 @media(max-width:480px){.report-score-layout .report-level{padding:8px 12px}.report-score-layout .level-chart-icon,.report-score-layout .level-chart-icon svg{width:21px;height:21px}.report-score-layout #global-level{font-size:16px}}
+/* Rythme compact et dimensions homogènes des panneaux du rapport. */
+.report-score-layout{grid-template-columns:minmax(300px,.34fr) minmax(0,.66fr);gap:14px;margin-top:14px;align-items:stretch}
+.report-score-layout>.global-result,
+.report-score-layout>.maturity-scale-section{height:100%;min-height:300px}
+.report-narrative-grid{gap:14px;margin-top:14px}
+.report-narrative-grid article{height:100%}
+.report-analysis-grid{gap:14px;margin-top:14px}
+.report-analysis-grid .strengths-columns{gap:12px}
+.report-analysis-grid .strengths-columns>div,
+.report-analysis-grid .strengths-columns>div+div{margin:0}
+.report-view .fixed-action-bar{margin-top:14px}
+.report-view .methodology{margin-top:14px}
+@media(max-width:900px){.report-score-layout{grid-template-columns:1fr}.report-score-layout>.global-result,.report-score-layout>.maturity-scale-section{min-height:0}.report-narrative-grid,.report-analysis-grid{gap:12px;margin-top:12px}}
+@media(max-width:700px){.report-score-layout,.report-narrative-grid,.report-analysis-grid{gap:10px;margin-top:10px}.report-analysis-grid .strengths-columns{gap:10px}}
