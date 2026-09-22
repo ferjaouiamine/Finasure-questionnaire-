@@ -437,3 +437,12 @@
 .report-analysis-grid .report-strengths-block .rank-card>small{display:none}
 .report-analysis-grid .report-strengths-block .rank-card>p:last-child{grid-column:1/-1;margin:0;color:#64768a;font-size:11px;line-height:1.45}
 @media(max-width:1100px) and (min-width:901px){.report-analysis-grid{grid-template-columns:minmax(0,1fr) minmax(320px,.82fr)}.report-analysis-grid .report-radar-wrap{height:500px}.report-analysis-grid .report-strengths-block .rank-card{grid-template-columns:1fr}.report-analysis-grid .report-strengths-block .rank-maturity-badge{grid-column:1;grid-row:auto;justify-self:start}}
+/* Carte score inspirée de la maquette de référence. */
+.report-score-layout .report-level{display:flex;align-items:center;justify-items:initial;gap:9px;width:auto;max-width:100%;padding:9px 15px;border:1px solid #ffd391;border-radius:999px;background:#fff3df;box-shadow:0 5px 14px rgba(7,27,51,.09)}
+.report-score-layout .report-level>small{display:none}
+.report-score-layout .level-chart-icon{display:grid;flex:0 0 auto;place-items:center;width:25px;height:25px;color:#f28c18}
+.report-score-layout .level-chart-icon svg{width:25px;height:25px;fill:none;stroke:currentColor;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
+.report-score-layout #global-level{max-width:100%;margin:0;padding:0;border:0;border-radius:0;background:transparent;box-shadow:none;color:var(--level-text);font-size:clamp(17px,1.35vw,22px);line-height:1.15;overflow-wrap:anywhere}
+.report-score-layout #global-level::before{content:"Niveau : ";font-weight:800}
+.report-score-layout #global-level .maturity-scale-link{display:inline;color:inherit}
+@media(max-width:480px){.report-score-layout .report-level{padding:8px 12px}.report-score-layout .level-chart-icon,.report-score-layout .level-chart-icon svg{width:21px;height:21px}.report-score-layout #global-level{font-size:16px}}
