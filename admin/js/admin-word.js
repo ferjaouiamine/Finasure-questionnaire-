@@ -1,0 +1,18 @@
+(function () {
+  "use strict";
+  const esc = (v) => String(v ?? "").replace(/[&<>"']/g, (c) => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+  const score = (v) => Number.isFinite(Number(v)) ? Number(v).toFixed(2).replace(".", ",") : "—";
+  const date = (v) => { const d = new Date(v); return Number.isNaN(d.getTime()) ? "—" : d.toLocaleDateString("fr-FR"); };
+  const slug = (v) => String(v || "Entreprise").normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^a-zA-Z0-9]+/g, "_").replace(/^_+|_+$/g, "").toUpperCase() || "ENTREPRISE";
+  function filename(a) { const d = new Date(a?.completed_at); const day = Number.isNaN(d.getTime()) ? new Date().toISOString().slice(0,10) : d.toISOString().slice(0,10); return `Rapport_ERM_${slug(a?.companies?.name)}_${day}.doc`; }
+  function buildDocument(a) {
+    const company=a?.companies||{}, person=a?.respondents||{};
+    const dims=[...(a?.dimension_scores||[])].sort((x,y)=>Number(x.id||0)-Number(y.id||0));
+    const answers=[...(a?.assessment_answers||[])].sort((x,y)=>Number(x.question_id)-Number(y.question_id));
+    const dimRows=dims.map(x=>`<tr><td>${esc(x.dimension_name)}</td><td>${score(x.score)} / 5</td><td>${esc(x.level)}</td></tr>`).join("");
+    const answerRows=answers.map(x=>`<tr><td>${esc(x.question_id)}</td><td>${esc(x.question_text)}</td><td>${esc(x.answer_text)}</td><td>${esc(x.score)}</td><td>${esc(x.comment||"")}</td></tr>`).join("");
+    return `<!doctype html><html><head><meta charset="utf-8"><style>@page{size:A4;margin:1.6cm}body{font-family:Arial,sans-serif;color:#0b2239;font-size:10pt;line-height:1.45}h1{font-size:24pt;color:#093b63;margin:0 0 6pt}h2{font-size:15pt;color:#093b63;margin:22pt 0 8pt;border-bottom:2px solid #25a9e0;padding-bottom:5pt}.subtitle{color:#557086;margin-bottom:18pt}.summary{width:100%;border-collapse:collapse;background:#edf8fc}.summary td{padding:8pt;border:1px solid #cde3ec}.score{font-size:20pt;font-weight:bold;color:#f28c18}table.data{width:100%;border-collapse:collapse;margin-top:7pt}table.data th{background:#093b63;color:#fff;text-align:left;padding:6pt}table.data td{border:1px solid #d8e2e8;padding:6pt;vertical-align:top}table.data tr:nth-child(even) td{background:#f6fafc}.footer{margin-top:24pt;padding-top:8pt;border-top:1px solid #ccd9e0;color:#6a7e8e;font-size:8pt}</style></head><body><h1>Rapport d’évaluation de maturité ERM</h1><p class="subtitle">Gestion des risques d’entreprise</p><table class="summary"><tr><td><strong>Entreprise</strong><br>${esc(company.name||"—")}</td><td><strong>Répondant</strong><br>${esc(`${person.first_name||""} ${person.last_name||""}`.trim()||"—")}</td></tr><tr><td><strong>Date</strong><br>${date(a?.completed_at)}</td><td><strong>Score global</strong><br><span class="score">${score(a?.global_score)} / 5</span><br>${esc(a?.global_level||"—")}</td></tr></table><h2>Scores par dimension</h2><table class="data"><thead><tr><th>Dimension</th><th>Score</th><th>Niveau</th></tr></thead><tbody>${dimRows}</tbody></table><h2>Réponses détaillées</h2><table class="data"><thead><tr><th>N°</th><th>Question</th><th>Réponse</th><th>Score</th><th>Commentaire</th></tr></thead><tbody>${answerRows}</tbody></table><p class="footer">Document généré depuis le dashboard administrateur Finasure.</p></body></html>`;
+  }
+  function exportAssessment(a) { const blob=new Blob(["\ufeff",buildDocument(a)],{type:"application/msword;charset=utf-8"}); const url=URL.createObjectURL(blob),link=document.createElement("a"); link.href=url;link.download=filename(a);document.body.append(link);link.click();link.remove();setTimeout(()=>URL.revokeObjectURL(url),1000); }
+  window.AdminWord=Object.freeze({buildDocument,filename,exportAssessment});
+})();
