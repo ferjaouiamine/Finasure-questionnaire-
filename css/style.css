@@ -503,3 +503,5 @@
 .report-score-layout>.global-result::after{content:none}
 .score-target{position:absolute;z-index:0;top:24px;right:26px;width:92px;height:92px;fill:none;stroke:#45a8d7;stroke-width:6;stroke-linecap:round;stroke-linejoin:round;opacity:.16;filter:drop-shadow(0 4px 10px rgba(0,0,0,.08));pointer-events:none}
 @media(max-width:700px){.score-target{top:22px;right:20px;width:74px;height:74px;stroke-width:5.5}}
+/* Carte score sans cible décorative. */
+.report-score-layout>.global-result::before,.report-score-layout>.global-result::after{content:none!important}
