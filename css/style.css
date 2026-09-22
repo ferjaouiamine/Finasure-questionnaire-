@@ -498,3 +498,8 @@
 .report-score-layout>.global-result::before{top:65px;right:19px;width:82px;background:rgba(78,174,225,.14)}
 .report-score-layout .report-level{margin-top:0;padding:10px 17px;border-color:#ffd08a;background:linear-gradient(180deg,#fff8ec,#ffefd5);box-shadow:0 7px 18px rgba(0,0,0,.12)}
 @media(max-width:700px){.report-score-layout>.global-result{min-height:250px;padding:28px}.report-score-layout .score-ring strong{font-size:64px}.report-score-layout>.global-result::after{width:68px;height:68px}.report-score-layout>.global-result::before{top:58px;width:66px}}
+/* Cible vectorielle nette dans la carte du score. */
+.report-score-layout>.global-result::before,
+.report-score-layout>.global-result::after{content:none}
+.score-target{position:absolute;z-index:0;top:24px;right:26px;width:92px;height:92px;fill:none;stroke:#45a8d7;stroke-width:6;stroke-linecap:round;stroke-linejoin:round;opacity:.16;filter:drop-shadow(0 4px 10px rgba(0,0,0,.08));pointer-events:none}
+@media(max-width:700px){.score-target{top:22px;right:20px;width:74px;height:74px;stroke-width:5.5}}
