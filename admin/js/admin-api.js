@@ -24,6 +24,22 @@
     q=q.order("completed_at",{ascending:false}).range(params.from,params.to);return check(await q);
   }
   async function assessment(id){return check(await db().from("assessments").select("*,companies(*),respondents(*),assessment_answers(*),dimension_scores(*),reports(*),appointments(*)").eq("id",id).single()).data;}
+  async function updateCompany(id,payload){
+    const {data,error}=await db().rpc("admin_update_company",{p_company_id:id,p_name:payload.name,p_sector:payload.sector||null,p_workforce:payload.workforce||null,p_scope:payload.scope||null});
+    if(error)throw error;return data;
+  }
+  async function deleteCompany(id){
+    const {data,error}=await db().rpc("admin_delete_company",{p_company_id:id});
+    if(error)throw error;return data;
+  }
+  async function updateAssessment(id,payload){
+    const {data,error}=await db().rpc("admin_update_assessment",{p_assessment_id:id,p_status:payload.status,p_completed_at:payload.completedAt||null});
+    if(error)throw error;return data;
+  }
+  async function deleteAssessment(id){
+    const {data,error}=await db().rpc("admin_delete_assessment",{p_assessment_id:id});
+    if(error)throw error;return data;
+  }
   async function reports(status){
     let q=db().from("reports").select("*,assessments(completed_at,global_score,global_level,companies(name),respondents(first_name,last_name,email,email_verified))");
     if(status==="sent")q=q.eq("status","sent");
@@ -33,5 +49,5 @@
   }
   async function appointments(){return check(await db().from("appointments").select("*,assessments(companies(name),respondents(first_name,last_name,email,phone,email_verified))").order("created_at",{ascending:false})).data;}
   async function activity(){return check(await db().from("activity_logs").select("*,companies(name),assessments(global_score)").order("created_at",{ascending:false}).limit(250)).data;}
-  window.AdminApi=Object.freeze({dashboard,companies,company,assessments,assessment,reports,appointments,activity});
+  window.AdminApi=Object.freeze({dashboard,companies,company,updateCompany,deleteCompany,assessments,assessment,updateAssessment,deleteAssessment,reports,appointments,activity});
 })();
