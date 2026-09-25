@@ -132,12 +132,6 @@
     slotsList.replaceChildren(fragment);
   }
 
-  function prefillForm() {
-    const client = state.client || {};
-    ["firstName", "lastName", "company", "email", "phone"].forEach((name) => {
-      if (form.elements[name]) form.elements[name].value = String(client[name] || "");
-    });
-  }
 
   function clearErrors() {
     form.querySelectorAll("[aria-invalid]").forEach((field) => field.removeAttribute("aria-invalid"));
@@ -145,13 +139,6 @@
     document.querySelector("#appointment-success").hidden = true;
   }
 
-  function addError(name, text, invalidFields) {
-    const field = form.elements[name];
-    field?.setAttribute("aria-invalid", "true");
-    const message = document.querySelector(`#error-${name}`);
-    if (message) message.textContent = text;
-    if (field) invalidFields.push(field);
-  }
 
   document.querySelector("#previous-month").addEventListener("click", () => {
     displayedMonth = new Date(displayedMonth.getFullYear(), displayedMonth.getMonth() - 1, 1);
@@ -165,64 +152,65 @@
   form.addEventListener("submit", async (event) => {
     event.preventDefault();
     clearErrors();
-    const values = Object.fromEntries(new FormData(form).entries());
-    values.email = String(values.email || "").trim();
-    form.elements.email.value = values.email;
-    const invalid = [];
 
-    if (String(values.firstName || "").trim().length < 2) addError("firstName", "Saisissez au moins 2 caractères.", invalid);
-    if (String(values.lastName || "").trim().length < 2) addError("lastName", "Saisissez au moins 2 caractères.", invalid);
-    if (!String(values.company || "").trim()) addError("company", "L’entreprise est obligatoire.", invalid);
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(values.email)) addError("email", "Saisissez une adresse e-mail valide.", invalid);
-    const phone = String(values.phone || "").trim();
-    if (!/^[+()\d\s.-]+$/.test(phone) || phone.replace(/\D/g, "").length < 7) addError("phone", "Saisissez un numéro de téléphone valide.", invalid);
-    if (!String(values.reason || "").trim()) addError("reason", "Précisez le motif du rendez-vous.", invalid);
-    const slotValid = Boolean(selectedDate && selectedSlot && calendarData.getAvailableSlots(selectedDate).includes(selectedSlot));
+    const slotValid = Boolean(
+      selectedDate &&
+      selectedSlot &&
+      calendarData.getAvailableSlots(selectedDate).includes(selectedSlot)
+    );
     if (!slotValid) {
-      document.querySelector("#error-slot").textContent = "Sélectionnez une date et un créneau disponibles.";
-      if (!invalid.length) document.querySelector("#calendar-title").scrollIntoView({ behavior: "smooth", block: "center" });
-    }
-
-    if (invalid.length || !slotValid) {
-      invalid[0]?.focus();
+      document.querySelector("#error-slot").textContent =
+        "Sélectionnez une date et un créneau disponibles.";
+      document.querySelector("#calendar-title").scrollIntoView({
+        behavior: "smooth",
+        block: "center"
+      });
       return;
     }
 
-    state.client = {
-      ...state.client,
-      firstName: String(values.firstName).trim(),
-      lastName: String(values.lastName).trim(),
-      company: String(values.company).trim(),
-      email: values.email,
-      phone
-    };
     state.booking = {
       ...state.booking,
       minimumDelayDays: calendarData.config.minimumDelayDays,
-      status: "demo-requested",
+      status: "requested",
       appointment: {
         date: calendarData.toDateKey(selectedDate),
         time: selectedSlot,
-        reason: String(values.reason).trim(),
+        reason: "Demande de rendez-vous suite au diagnostic ERM",
         requestedAt: new Date().toISOString()
       }
     };
 
+    const errorBox = document.querySelector("#appointment-error");
+    const submitButton = document.querySelector("#appointment-submit");
+    errorBox.hidden = true;
+    submitButton.disabled = true;
+    submitButton.textContent = "Enregistrement…";
+
     if (!FinasureStorage.save(state)) {
-      const box = document.querySelector("#appointment-error");
-      box.textContent = "Impossible d’enregistrer votre demande pour le moment.";
-      box.hidden = false;
+      errorBox.textContent = "Impossible d’enregistrer votre demande pour le moment.";
+      errorBox.hidden = false;
+      submitButton.disabled = false;
+      submitButton.textContent = "Enregistrer ma demande →";
       return;
     }
-    await window.FinasureAssessmentSync?.syncAppointment(
+
+    const result = await window.FinasureAssessmentSync?.syncAppointment(
       state,
       state.booking.appointment
     );
+    if (result && !result.synced) {
+      errorBox.textContent =
+        "La demande est enregistrée sur cet appareil, mais sa synchronisation est en attente. Veuillez réessayer.";
+      errorBox.hidden = false;
+      submitButton.disabled = false;
+      submitButton.textContent = "Réessayer l’enregistrement →";
+      return;
+    }
     const success = document.querySelector("#appointment-success");
     success.hidden = false;
+    submitButton.textContent = "Demande enregistrée";
     success.scrollIntoView({ behavior: "smooth", block: "center" });
   });
 
-  prefillForm();
   renderCalendar();
 })();

@@ -28,14 +28,8 @@
       </section>
     </div>
     <section class="appointment-form-section" aria-labelledby="appointment-form-title">
-      <div class="section-heading"><p class="eyebrow"><span></span> Vos informations</p><h2 id="appointment-form-title">Confirmez votre demande</h2></div>
-      <form id="appointment-form" class="identity-form" novalidate>
-        <div class="field"><label for="appointment-firstName">Prénom *</label><input id="appointment-firstName" name="firstName" autocomplete="given-name" minlength="2" required><small id="error-firstName" class="field-error" aria-live="polite"></small></div>
-        <div class="field"><label for="appointment-lastName">Nom *</label><input id="appointment-lastName" name="lastName" autocomplete="family-name" minlength="2" required><small id="error-lastName" class="field-error" aria-live="polite"></small></div>
-        <div class="field"><label for="appointment-company">Entreprise *</label><input id="appointment-company" name="company" autocomplete="organization" required><small id="error-company" class="field-error" aria-live="polite"></small></div>
-        <div class="field"><label for="appointment-email">Adresse e-mail *</label><input id="appointment-email" name="email" type="email" autocomplete="email" required><small id="error-email" class="field-error" aria-live="polite"></small></div>
-        <div class="field"><label for="appointment-phone">Téléphone *</label><input id="appointment-phone" name="phone" type="tel" autocomplete="tel" required><small id="error-phone" class="field-error" aria-live="polite"></small></div>
-        <div class="field field-wide"><label for="appointment-reason">Motif du rendez-vous *</label><textarea id="appointment-reason" name="reason" rows="4" placeholder="Précisez brièvement votre besoin…" required></textarea><small id="error-reason" class="field-error" aria-live="polite"></small></div>
+      <div class="section-heading"><h2 id="appointment-form-title">Enregistrer votre demande</h2></div>
+      <form id="appointment-form" class="identity-form appointment-save-form" novalidate>
         <div class="appointment-summary field-wide"><strong>Rendez-vous choisi</strong><span id="appointment-selection">Aucun créneau sélectionné</span><small id="error-slot" class="field-error" aria-live="polite"></small></div>
         <div id="appointment-success" class="notice appointment-success field-wide" role="status" aria-live="polite" hidden>Votre demande de rendez-vous a bien été enregistrée.</div>
         <div class="form-actions"><a class="button button-ghost" href="rapport-complet.html">← Retour au rapport</a><button id="appointment-submit" class="button" type="submit">Enregistrer ma demande →</button></div>
@@ -43,6 +37,6 @@
     </section>
   </main>
   <footer><a class="brand footer-brand" href="index.html"><img src="assets/logo-finasure.png" alt="Finasure"></a><p>Prise de rendez-vous — démonstration</p><p>© 2026 Finasure.</p></footer>
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="js/questionnaire-data.js?v=20260917-1"></script><script src="js/storage.js"></script><script src="js/supabase-config.js"></script><script src="js/supabase-client.js"></script><script src="js/assessment-sync.js?v=20260917-1"></script><script src="js/calendar-data.js"></script><script src="js/rendez-vous.js?v=20260918-1"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="js/questionnaire-data.js?v=20260917-1"></script><script src="js/storage.js"></script><script src="js/supabase-config.js"></script><script src="js/supabase-client.js"></script><script src="js/assessment-sync.js?v=20260917-1"></script><script src="js/calendar-data.js"></script><script src="js/rendez-vous.js?v=20260925-1"></script>
 </body>
 </html>
