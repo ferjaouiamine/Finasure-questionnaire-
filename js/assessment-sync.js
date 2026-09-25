@@ -112,6 +112,17 @@
         { p_payload: payload }
       );
       if (error) throw error;
+      if (!data?.assessment_id || !data?.public_access_token) {
+        throw new Error("La réponse Supabase ne contient pas les identifiants de l’évaluation.");
+      }
+
+      state.remoteAssessmentId = data.assessment_id;
+      state.remoteAccessToken = data.public_access_token;
+      state.syncStatus = "synced";
+      state.syncedAt = new Date().toISOString();
+      state.syncError = "";
+      window.FinasureStorage?.save(state);
+
       const { error: recommendationsError } = await api.client.rpc(
         "save_assessment_recommendations",
         {
@@ -120,19 +131,16 @@
           p_recommendations: payload.recommendations
         }
       );
-      if (recommendationsError) throw recommendationsError;
-      state.remoteAssessmentId = data.assessment_id;
-      state.remoteAccessToken = data.public_access_token;
-      state.syncStatus = "synced";
-      state.syncedAt = new Date().toISOString();
-      window.FinasureStorage?.save(state);
-      return { synced: true, data };
+      if (recommendationsError) {
+        console.warn("Recommandations non synchronisées", recommendationsError);
+      }
+      return { synced: true, data, recommendationsSynced: !recommendationsError };
     } catch (error) {
       console.error("Synchronisation Supabase différée", error);
       state.syncStatus = "pending";
       state.syncError = "La synchronisation sera retentée ultérieurement.";
       window.FinasureStorage?.save(state);
-      return { synced: false, reason: "request-failed" };
+      return { synced: false, reason: "request-failed", error: error?.message || "" };
     }
   }
 
@@ -147,22 +155,53 @@
 
   async function syncAppointment(state, appointment) {
     const api = window.FinasureSupabase;
-    if (!api?.configured) return { synced: false };
-    if (!state.remoteAssessmentId) await syncAssessment(state, { reportRequested: true });
-    if (!state.remoteAssessmentId) return { synced: false };
+    if (!api?.configured || !api.client) {
+      return { synced: false, reason: "not-configured" };
+    }
 
-    const { error } = await api.client.rpc("request_appointment", {
+    if (!state.remoteAssessmentId || !state.remoteAccessToken) {
+      state.remoteAssessmentId = "";
+      state.remoteAccessToken = "";
+      const assessmentResult = await syncAssessment(state, { reportRequested: true });
+      if (!assessmentResult.synced) {
+        return {
+          synced: false,
+          reason: "assessment-sync-failed",
+          error: assessmentResult.error || ""
+        };
+      }
+    }
+
+    const sendAppointment = () => api.client.rpc("request_appointment", {
       p_assessment_id: state.remoteAssessmentId,
       p_public_access_token: state.remoteAccessToken,
       p_date: appointment.date,
       p_time: appointment.time,
       p_reason: appointment.reason
     });
+
+    let { data, error } = await sendAppointment();
+    if (error && /invalid assessment token/i.test(error.message || "")) {
+      state.remoteAssessmentId = "";
+      state.remoteAccessToken = "";
+      window.FinasureStorage?.save(state);
+      const recovery = await syncAssessment(state, { reportRequested: true });
+      if (recovery.synced) {
+        ({ data, error } = await sendAppointment());
+      } else {
+        error = { message: recovery.error || error.message };
+      }
+    }
+
     if (error) {
       console.error("Synchronisation du rendez-vous différée", error);
-      return { synced: false };
+      return {
+        synced: false,
+        reason: "appointment-failed",
+        error: error.message || "Erreur Supabase"
+      };
     }
-    return { synced: true };
+    return { synced: true, appointmentId: data };
   }
 
   window.FinasureAssessmentSync = Object.freeze({

@@ -199,8 +199,10 @@
       state.booking.appointment
     );
     if (result && !result.synced) {
+      const technicalDetail = result.error ? ` Détail : ${result.error}` : "";
       errorBox.textContent =
-        "La demande est enregistrée sur cet appareil, mais sa synchronisation est en attente. Veuillez réessayer.";
+        "La demande n’a pas pu être enregistrée dans Supabase. Veuillez réessayer." +
+        technicalDetail;
       errorBox.hidden = false;
       submitButton.disabled = false;
       submitButton.textContent = "Réessayer l’enregistrement →";
